@@ -5,6 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 @SpringBootApplication
@@ -15,10 +17,10 @@ public class InDishApplication {
 	}
 
 
-/*	@Bean
+	@Bean
 	public PasswordEncoder encoder() {
 		return new BCryptPasswordEncoder();
-	}*/
+	}
 
 	/**
 	 * An application context delegates the message resolution to a bean with the exact name messageSource.
@@ -44,4 +46,8 @@ public class InDishApplication {
 		return bean;
 	}
 
+/*	@Bean
+	public MyUserMapper myUserMapper(){
+		return new MyUserMapperImpl();
+	}*/
 }
