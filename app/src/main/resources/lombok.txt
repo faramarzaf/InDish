@@ -1,0 +1,26 @@
+
+    /**
+     * LOMBOK
+     *
+     * entity
+     * @ToString for toString pojo
+     * @AllArgsConstructor
+     * if you want for example constructor without id, you should make that in traditional way.
+     *
+     *  another usage--> for example you have a dependency like this.
+     *
+     * 		private final CustomService service;
+     *        @AutoWired
+     *        public controller(CustomService service ){
+     * 		    this.service=service
+     *        }
+     *      you can delete ####controller### and the just add AllArgsConstructor
+     *
+     *
+     * if you have a class that you want log in that
+     * @Slf4j
+     * and then in methods --> log.info();
+     *
+     * @Data ---> getter + setter + toString + equal-and-hashcode + RequiredArgsConstructor
+     *
+     */
