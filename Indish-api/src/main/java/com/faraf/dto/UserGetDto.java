@@ -9,33 +9,38 @@ import java.util.List;
 
 public class UserGetDto {
 
-    private Long id;
     private String userName;
     private String email;
-    private String password;
-    private UserProfileDto userProfile;
+    private String country;
+    private String city;
+    private String bio;
+    private byte[] avatar;
     private List<FoodPostDto> posts = new ArrayList<>();
-    private LocalDateTime joinedOn;
+    private LocalDateTime create_date;
+    private LocalDateTime modified_date;
 
     public UserGetDto() {
     }
 
-    public UserGetDto(Long id, String userName, String email, String password, UserProfileDto userProfile, List<FoodPostDto> posts, LocalDateTime joinedOn) {
-        this.id = id;
+    public UserGetDto(String userName, String email, String country, String city, String bio, byte[] avatar, List<FoodPostDto> posts, LocalDateTime create_date, LocalDateTime modified_date) {
         this.userName = userName;
         this.email = email;
-        this.password = password;
-        this.userProfile = userProfile;
+        this.country = country;
+        this.city = city;
+        this.bio = bio;
+        this.avatar = avatar;
         this.posts = posts;
-        this.joinedOn = joinedOn;
+        this.create_date = create_date;
+        this.modified_date = modified_date;
     }
 
-    public Long getId() {
-        return id;
+
+    public LocalDateTime getModified_date() {
+        return modified_date;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setModified_date(LocalDateTime modified_date) {
+        this.modified_date = modified_date;
     }
 
     public String getUserName() {
@@ -54,21 +59,6 @@ public class UserGetDto {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public UserProfileDto getUserProfile() {
-        return userProfile;
-    }
-
-    public void setUserProfile(UserProfileDto userProfile) {
-        this.userProfile = userProfile;
-    }
 
     public List<FoodPostDto> getPosts() {
         return posts;
@@ -78,24 +68,58 @@ public class UserGetDto {
         this.posts = posts;
     }
 
-    public LocalDateTime getJoinedOn() {
-        return joinedOn;
+    public byte[] getAvatar() {
+        return avatar;
     }
 
-    public void setJoinedOn(LocalDateTime joinedOn) {
-        this.joinedOn = joinedOn;
+    public void setAvatar(byte[] avatar) {
+        this.avatar = avatar;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public LocalDateTime getCreate_date() {
+        return create_date;
+    }
+
+    public void setCreate_date(LocalDateTime create_date) {
+        this.create_date = create_date;
     }
 
     @Override
     public String toString() {
         return "UserGetDto{" +
-                "id=" + id +
-                ", userName='" + userName + '\'' +
+                "userName='" + userName + '\'' +
                 ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", userProfile=" + userProfile +
+                ", country='" + country + '\'' +
+                ", city='" + city + '\'' +
+                ", bio='" + bio + '\'' +
+                ", avatar='" + avatar + '\'' +
                 ", posts=" + posts +
-                ", joinedOn=" + joinedOn +
+                ", create_date=" + create_date +
+                ", modified_date=" + modified_date +
                 '}';
     }
 }

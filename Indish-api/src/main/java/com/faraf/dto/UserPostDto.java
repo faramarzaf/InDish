@@ -7,6 +7,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -24,19 +25,28 @@ public class UserPostDto {
     @NotEmpty(message = "{password.blank}")
     private String password;
 
-    private UserProfileDto userProfile;
+    private String bio;
+
+    private String city;
+
+    private String country;
+
+    private String  avatar;
 
     private List<FoodPostDto> posts = new ArrayList<>();
 
     public UserPostDto() {
     }
 
-    public UserPostDto(String userName, String email, String password, UserProfileDto userProfile, List<FoodPostDto> posts) {
+    public UserPostDto(String userName, String email, String password, String bio, String city, String country,String avatar, List<FoodPostDto> posts) {
         this.userName = userName;
         this.email = email;
         this.password = password;
-        this.userProfile = userProfile;
+        this.bio = bio;
+        this.city = city;
+        this.country = country;
         this.posts = posts;
+        this.avatar = avatar;
     }
 
     public String getUserName() {
@@ -63,14 +73,6 @@ public class UserPostDto {
         this.password = password;
     }
 
-    public UserProfileDto getUserProfile() {
-        return userProfile;
-    }
-
-    public void setUserProfile(UserProfileDto userProfile) {
-        this.userProfile = userProfile;
-    }
-
     public List<FoodPostDto> getPosts() {
         return posts;
     }
@@ -79,13 +81,49 @@ public class UserPostDto {
         this.posts = posts;
     }
 
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+
     @Override
     public String toString() {
         return "UserPostDto{" +
                 "userName='" + userName + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", userProfile=" + userProfile +
+                ", bio='" + bio + '\'' +
+                ", city='" + city + '\'' +
+                ", country='" + country + '\'' +
+                ", avatar='" + avatar + '\'' +
                 ", posts=" + posts +
                 '}';
     }

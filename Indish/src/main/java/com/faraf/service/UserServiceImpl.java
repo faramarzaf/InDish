@@ -64,7 +64,6 @@ public class UserServiceImpl implements UserService {
         UserGetDto userById = getUserById(id);
         userById.setUserName(user.getUserName());
         userById.setPosts(user.getPosts());
-        userById.setUserProfile(user.getUserProfile());
         User userToSave = repository.save(userMapper.toEntity(userById));
         return userMapper.toUserGet(userToSave);
     }
