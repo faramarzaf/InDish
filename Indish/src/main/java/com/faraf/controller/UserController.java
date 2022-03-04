@@ -44,9 +44,7 @@ public class UserController {
 
 
     @PostMapping("/save")
-    public HashMap<String, String> save(@Valid @RequestBody UserPostDto user, @RequestParam("avatar") MultipartFile file) {
-        /*String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-        user.setAvatar(fileName);*/
+    public HashMap<String, String> save(@Valid @RequestBody UserPostDto user) {
         return service.save(user);
     }
 

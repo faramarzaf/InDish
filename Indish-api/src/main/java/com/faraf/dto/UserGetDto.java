@@ -14,7 +14,7 @@ public class UserGetDto {
     private String country;
     private String city;
     private String bio;
-    private byte[] avatar;
+    private String avatar;
     private List<FoodPostDto> posts = new ArrayList<>();
     private LocalDateTime create_date;
     private LocalDateTime modified_date;
@@ -22,7 +22,7 @@ public class UserGetDto {
     public UserGetDto() {
     }
 
-    public UserGetDto(String userName, String email, String country, String city, String bio, byte[] avatar, List<FoodPostDto> posts, LocalDateTime create_date, LocalDateTime modified_date) {
+    public UserGetDto(String userName, String email, String country, String city, String bio,String avatar, List<FoodPostDto> posts, LocalDateTime create_date, LocalDateTime modified_date) {
         this.userName = userName;
         this.email = email;
         this.country = country;
@@ -68,11 +68,11 @@ public class UserGetDto {
         this.posts = posts;
     }
 
-    public byte[] getAvatar() {
+    public String getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(byte[] avatar) {
+    public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
 

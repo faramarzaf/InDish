@@ -3,6 +3,7 @@ package com.faraf.service;
 import com.faraf.dto.UserGetDto;
 import com.faraf.dto.UserPostDto;
 import com.faraf.entity.User;
+import com.faraf.exception.DuplicatedRecordException;
 import com.faraf.exception.InternalServerException;
 import com.faraf.exception.NotFoundException;
 import com.faraf.mapper.UserMapper;
@@ -119,10 +120,10 @@ public class UserServiceImpl implements UserService {
     private HashMap<String, String> validateUser(HashMap<String, String> response, UserPostDto userPostDto) {
 
         if (repository.existsUserByUserName(userPostDto.getUserName())) {
-            throw new InternalServerException(generalMessages.getMsgDuplicatedUsername());
+            throw new DuplicatedRecordException(generalMessages.getMsgDuplicatedUsername());
 
         } else if (repository.existsUserByEmail(userPostDto.getEmail())) {
-            throw new InternalServerException(generalMessages.getMsgDuplicatedEmail());
+            throw new DuplicatedRecordException(generalMessages.getMsgDuplicatedEmail());
 
         } else if (!repository.existsUserByUserName(userPostDto.getUserName()) || !repository.existsUserByEmail(userPostDto.getEmail())) {
             saveUser(userPostDto);
