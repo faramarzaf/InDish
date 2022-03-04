@@ -7,7 +7,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -33,12 +32,12 @@ public class UserPostDto {
 
     private String  avatar;
 
-    private List<FoodPostDto> posts = new ArrayList<>();
+    private List<FoodPostRequestDto> posts = new ArrayList<>();
 
     public UserPostDto() {
     }
 
-    public UserPostDto(String userName, String email, String password, String bio, String city, String country,String avatar, List<FoodPostDto> posts) {
+    public UserPostDto(String userName, String email, String password, String bio, String city, String country,String avatar, List<FoodPostRequestDto> posts) {
         this.userName = userName;
         this.email = email;
         this.password = password;
@@ -73,11 +72,11 @@ public class UserPostDto {
         this.password = password;
     }
 
-    public List<FoodPostDto> getPosts() {
+    public List<FoodPostRequestDto> getPosts() {
         return posts;
     }
 
-    public void setPosts(List<FoodPostDto> posts) {
+    public void setPosts(List<FoodPostRequestDto> posts) {
         this.posts = posts;
     }
 

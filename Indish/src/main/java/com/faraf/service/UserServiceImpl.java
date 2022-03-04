@@ -1,10 +1,11 @@
 package com.faraf.service;
 
+import com.faraf.dto.FoodPostRequestDto;
 import com.faraf.dto.UserGetDto;
+import com.faraf.dto.UserInfoUpdateRequestDto;
 import com.faraf.dto.UserPostDto;
 import com.faraf.entity.User;
 import com.faraf.exception.DuplicatedRecordException;
-import com.faraf.exception.InternalServerException;
 import com.faraf.exception.NotFoundException;
 import com.faraf.mapper.UserMapper;
 import com.faraf.repository.UserRepository;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -61,12 +63,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserGetDto update(UserPostDto user, Long id) { //todo has bug
+    public UserGetDto updateUserInfo(UserInfoUpdateRequestDto user, Long id) {
         UserGetDto userById = getUserById(id);
-        userById.setUserName(user.getUserName());
+        userById.setBio(user.getBio());
+        userById.setCity(user.getCity());
+        userById.setCountry(user.getCountry());
+        userById.setAvatar(user.getAvatar());
         userById.setPosts(user.getPosts());
         User userToSave = repository.save(userMapper.toEntity(userById));
         return userMapper.toUserGet(userToSave);
+    }
+
+    @Override
+    @Transactional
+    public void addFoodToUser(Long userId, List<FoodPostRequestDto> requestDtoList) {
+        UserGetDto userById = getUserById(userId);
+        userById.setPosts(requestDtoList);
+        User user = userMapper.toEntity(userById);
+        repository.save(user);
     }
 
     @Override

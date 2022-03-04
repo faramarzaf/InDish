@@ -2,7 +2,7 @@ package com.faraf.dto;
 
 import java.time.LocalDateTime;
 
-public class FoodPostDto {
+public class FoodPostResponseDto {
 
     private Long id;
     private String name;
@@ -10,18 +10,21 @@ public class FoodPostDto {
     private String originCountry;
     private int timeRequired;
     private boolean isVeganFood;
-    private LocalDateTime createdAt;
+
+    private LocalDateTime created_date;
+    private LocalDateTime modified_date;
     private UserGetDto user;
 
 
-    public FoodPostDto(Long id, String name, String description, String originCountry, int timeRequired, boolean isVeganFood, LocalDateTime createdAt, UserGetDto user) {
+    public FoodPostResponseDto(Long id, String name, String description, String originCountry, int timeRequired, boolean isVeganFood, LocalDateTime created_date, LocalDateTime modified_date, UserGetDto user) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.originCountry = originCountry;
         this.timeRequired = timeRequired;
         this.isVeganFood = isVeganFood;
-        this.createdAt = createdAt;
+        this.created_date = created_date;
+        this.modified_date = modified_date;
         this.user = user;
     }
 
@@ -73,12 +76,20 @@ public class FoodPostDto {
         isVeganFood = veganFood;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
+    public LocalDateTime getCreated_date() {
+        return created_date;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+    public void setCreated_date(LocalDateTime created_date) {
+        this.created_date = created_date;
+    }
+
+    public LocalDateTime getModified_date() {
+        return modified_date;
+    }
+
+    public void setModified_date(LocalDateTime modified_date) {
+        this.modified_date = modified_date;
     }
 
     public UserGetDto getUser() {
@@ -99,7 +110,8 @@ public class FoodPostDto {
                 ", originCountry='" + originCountry + '\'' +
                 ", timeRequired=" + timeRequired +
                 ", isVeganFood=" + isVeganFood +
-                ", createdAt=" + createdAt +
+                ", created_date=" + created_date +
+                ", modified_date=" + modified_date +
                 ", user=" + user +
                 '}';
     }

@@ -1,7 +1,6 @@
 package com.faraf.dto;
 
 
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,24 +8,28 @@ import java.util.List;
 
 public class UserGetDto {
 
+    private Long id;
     private String userName;
     private String email;
     private String country;
     private String city;
+    private String password;
     private String bio;
     private String avatar;
-    private List<FoodPostDto> posts = new ArrayList<>();
+    private List<FoodPostRequestDto> posts = new ArrayList<>();
     private LocalDateTime create_date;
     private LocalDateTime modified_date;
 
     public UserGetDto() {
     }
 
-    public UserGetDto(String userName, String email, String country, String city, String bio,String avatar, List<FoodPostDto> posts, LocalDateTime create_date, LocalDateTime modified_date) {
+    public UserGetDto(Long id, String userName, String email, String country, String city, String password, String bio, String avatar, List<FoodPostRequestDto> posts, LocalDateTime create_date, LocalDateTime modified_date) {
+        this.id = id;
         this.userName = userName;
         this.email = email;
         this.country = country;
         this.city = city;
+        this.password = password;
         this.bio = bio;
         this.avatar = avatar;
         this.posts = posts;
@@ -34,6 +37,13 @@ public class UserGetDto {
         this.modified_date = modified_date;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public LocalDateTime getModified_date() {
         return modified_date;
@@ -59,12 +69,19 @@ public class UserGetDto {
         this.email = email;
     }
 
+    public String getPassword() {
+        return password;
+    }
 
-    public List<FoodPostDto> getPosts() {
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public List<FoodPostRequestDto> getPosts() {
         return posts;
     }
 
-    public void setPosts(List<FoodPostDto> posts) {
+    public void setPosts(List<FoodPostRequestDto> posts) {
         this.posts = posts;
     }
 
@@ -111,10 +128,12 @@ public class UserGetDto {
     @Override
     public String toString() {
         return "UserGetDto{" +
-                "userName='" + userName + '\'' +
+                "id=" + id +
+                ", userName='" + userName + '\'' +
                 ", email='" + email + '\'' +
                 ", country='" + country + '\'' +
                 ", city='" + city + '\'' +
+                ", password='" + password + '\'' +
                 ", bio='" + bio + '\'' +
                 ", avatar='" + avatar + '\'' +
                 ", posts=" + posts +
