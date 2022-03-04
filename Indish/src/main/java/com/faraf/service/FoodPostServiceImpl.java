@@ -42,8 +42,8 @@ public class FoodPostServiceImpl implements FoodPostService {
     }
 
     @Override
-    public void addFoodPost(Long userId, List<FoodPostRequestDto> requestDtoList) {
-        userService.addFoodToUser(userId, requestDtoList);
+    public void addFoodPost(Long userId, FoodPostRequestDto requestDto) {
+        userService.addFoodToUser(userId, requestDto);
     }
 
     @Override

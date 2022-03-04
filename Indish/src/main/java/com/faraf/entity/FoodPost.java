@@ -40,7 +40,7 @@ public class FoodPost {
     private LocalDateTime modified_date;
 
     @ManyToOne
-    @JoinColumn(name = "fp_fid", insertable = false, updatable = false)
+    @JoinColumn(name = "fp_fid",referencedColumnName = "id")
     private User user;
 
     public FoodPost() {
@@ -122,7 +122,7 @@ public class FoodPost {
         this.modified_date = modified_date;
     }
 
-    @JsonIgnore
+   // @JsonIgnore
     public User getUser() {
         return user;
     }

@@ -39,8 +39,8 @@ public class FoodPostController {
 
 
     @PostMapping("/save")
-    public void postFood(@RequestParam("userId") Long id, @RequestBody List<FoodPostRequestDto> requestDtoList) {
-        foodPostService.addFoodPost(id, requestDtoList);
+    public void postFood(@RequestParam("userId") Long id, @RequestBody  FoodPostRequestDto requestDto) {
+        foodPostService.addFoodPost(id, requestDto);
     }
 
 }

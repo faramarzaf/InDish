@@ -15,7 +15,7 @@ public interface UserService {
 
     UserGetDto updateUserInfo(UserInfoUpdateRequestDto user, Long id);
 
-    void addFoodToUser(Long userId, List<FoodPostRequestDto> requestDtoList);
+    void addFoodToUser(Long userId ,FoodPostRequestDto foodPostRequestDto);
 
     //  List<UserGetDto> getAllUsers(Integer pageNo, Integer pageSize, String sortBy);
 

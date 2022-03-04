@@ -7,7 +7,7 @@ import java.util.List;
 public interface FoodPostService {
 
 
-    void addFoodPost(Long userId, List<FoodPostRequestDto> foodPostRequestDtos);
+    void addFoodPost(Long userId,  FoodPostRequestDto requestDto);
 
     void updateFoodPost(Long userId, Long foodPostId);
 

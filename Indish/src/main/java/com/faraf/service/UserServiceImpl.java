@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -76,9 +77,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void addFoodToUser(Long userId, List<FoodPostRequestDto> requestDtoList) {
+    public void addFoodToUser(Long userId, FoodPostRequestDto requestDto) {//bug audit of each child food entity updates at all in each add food call
         UserGetDto userById = getUserById(userId);
-        userById.setPosts(requestDtoList);
+        userById.getPosts().add(requestDto);
         User user = userMapper.toEntity(userById);
         repository.save(user);
     }
