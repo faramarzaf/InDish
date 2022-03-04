@@ -2,7 +2,6 @@ package com.faraf.exception;
 
 
 import com.faraf.dto.ErrorResponse;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
@@ -16,10 +15,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-//import lombok.extern.slf4j.Slf4j;
-
 @ControllerAdvice
-@Slf4j
 public class BaseErrorHandles {
 
     @ExceptionHandler(BindException.class)
@@ -40,19 +36,21 @@ public class BaseErrorHandles {
     }
 
 
+/*
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<Object> handleNotFoundException(BindException ex) {
+    public ResponseEntity<Object> handleNotFoundException(Exception ex) {
         ValidationException validationException = new ValidationException(ex.getMessage(), HttpStatus.NOT_FOUND, LocalDateTime.now());
         return new ResponseEntity<>(validationException, HttpStatus.NOT_FOUND);
     }
+*/
 
 
     @ResponseBody
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(InternalServerException.class)
-    public ResponseEntity<Object> handleInternalServerException(BindException ex) {
+    public ResponseEntity<Object> handleInternalServerException(Exception ex) {
         ValidationException validationException = new ValidationException(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, LocalDateTime.now());
         return new ResponseEntity<>(validationException, HttpStatus.INTERNAL_SERVER_ERROR);
     }
