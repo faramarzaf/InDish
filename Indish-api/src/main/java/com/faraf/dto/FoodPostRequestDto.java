@@ -1,7 +1,5 @@
 package com.faraf.dto;
 
-import java.time.LocalDateTime;
-
 public class FoodPostRequestDto {
 
     private String name;
@@ -13,7 +11,7 @@ public class FoodPostRequestDto {
     public FoodPostRequestDto() {
     }
 
-    public FoodPostRequestDto(String name, String description, String originCountry, int timeRequired, boolean isVeganFood  ) {
+    public FoodPostRequestDto(String name, String description, String originCountry, int timeRequired, boolean isVeganFood) {
         this.name = name;
         this.description = description;
         this.originCountry = originCountry;
@@ -60,7 +58,6 @@ public class FoodPostRequestDto {
     public void setIsVeganFood(Boolean veganFood) {
         isVeganFood = veganFood;
     }
-
 
 
     @Override

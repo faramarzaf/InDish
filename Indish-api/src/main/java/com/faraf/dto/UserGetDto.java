@@ -16,14 +16,14 @@ public class UserGetDto {
     private String password;
     private String bio;
     private String avatar;
-    private List<FoodPostRequestDto> posts = new ArrayList<>();
+    private List<FoodPostResponseDto> posts = new ArrayList<>();
     private LocalDateTime create_date;
     private LocalDateTime modified_date;
 
     public UserGetDto() {
     }
 
-    public UserGetDto(Long id, String userName, String email, String country, String city, String password, String bio, String avatar, List<FoodPostRequestDto> posts, LocalDateTime create_date, LocalDateTime modified_date) {
+    public UserGetDto(Long id, String userName, String email, String country, String city, String password, String bio, String avatar, List<FoodPostResponseDto> posts, LocalDateTime create_date, LocalDateTime modified_date) {
         this.id = id;
         this.userName = userName;
         this.email = email;
@@ -77,11 +77,11 @@ public class UserGetDto {
         this.password = password;
     }
 
-    public List<FoodPostRequestDto> getPosts() {
+    public List<FoodPostResponseDto> getPosts() {
         return posts;
     }
 
-    public void setPosts(List<FoodPostRequestDto> posts) {
+    public void setPosts(List<FoodPostResponseDto> posts) {
         this.posts = posts;
     }
 

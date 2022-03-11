@@ -7,15 +7,14 @@ import com.faraf.dto.UserInfoUpdateRequestDto;
 import com.faraf.dto.UserPostDto;
 
 import java.util.HashMap;
-import java.util.List;
 
 public interface UserService {
 
-    HashMap<String, String> save(UserPostDto user);
+   UserGetDto save(UserPostDto user);
 
-    UserGetDto updateUserInfo(UserInfoUpdateRequestDto user, Long id);
+    void updateUserInfo(UserInfoUpdateRequestDto user, Long id);
 
-    void addFoodToUser(Long userId ,FoodPostRequestDto foodPostRequestDto);
+    void addFoodToUser(Long userId, FoodPostRequestDto foodPostRequestDto);
 
     //  List<UserGetDto> getAllUsers(Integer pageNo, Integer pageSize, String sortBy);
 

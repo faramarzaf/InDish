@@ -5,8 +5,8 @@ import com.faraf.dto.UserGetDto;
 import com.faraf.dto.UserInfoUpdateRequestDto;
 import com.faraf.dto.UserPostDto;
 import com.faraf.service.UserService;
-import com.faraf.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -28,7 +28,6 @@ public class UserController {
         return new ResponseEntity<>(list, new HttpHeaders(), HttpStatus.OK);
     }*/
 
-
     @RequestMapping(params = "username", method = RequestMethod.GET)
     public UserGetDto findByUsername(@RequestParam("username") String username) {
         return userService.getUserByUsername(username);
@@ -41,13 +40,13 @@ public class UserController {
 
 
     @PostMapping("/save")
-    public HashMap<String, String> save(@Valid @RequestBody UserPostDto user) {
-        return userService.save(user);
+    public ResponseEntity<UserGetDto> save(@Valid @RequestBody UserPostDto userPostDto) {
+        return ResponseEntity.ok(userService.save(userPostDto));
     }
 
     @PutMapping("/update")
-    public UserGetDto update(@RequestBody UserInfoUpdateRequestDto user, @RequestParam("id") Long id) {
-        return userService.updateUserInfo(user, id);
+    public void update(@RequestBody UserInfoUpdateRequestDto user, @RequestParam("id") Long id) {
+        userService.updateUserInfo(user, id);
     }
 
     @DeleteMapping("/deleteAll")

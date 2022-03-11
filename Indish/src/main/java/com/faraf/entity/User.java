@@ -61,6 +61,11 @@ public class User {
     @JoinColumn(name = "fp_fid", referencedColumnName = "id")
     private List<FoodPost> posts = new ArrayList<>();
 
+    public void addFoodToUser(FoodPost foodPost) {
+        foodPost.setUser(this);
+        this.posts.add(foodPost);
+    }
+
     public User() {
     }
 
@@ -165,6 +170,43 @@ public class User {
 
     public void setModified_date(LocalDateTime modified_date) {
         this.modified_date = modified_date;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        if (id != null ? !id.equals(user.id) : user.id != null) return false;
+        if (userName != null ? !userName.equals(user.userName) : user.userName != null) return false;
+        if (email != null ? !email.equals(user.email) : user.email != null) return false;
+        if (password != null ? !password.equals(user.password) : user.password != null) return false;
+        if (bio != null ? !bio.equals(user.bio) : user.bio != null) return false;
+        if (city != null ? !city.equals(user.city) : user.city != null) return false;
+        if (country != null ? !country.equals(user.country) : user.country != null) return false;
+        if (avatar != null ? !avatar.equals(user.avatar) : user.avatar != null) return false;
+        if (create_date != null ? !create_date.equals(user.create_date) : user.create_date != null) return false;
+        if (modified_date != null ? !modified_date.equals(user.modified_date) : user.modified_date != null)
+            return false;
+        return posts != null ? posts.equals(user.posts) : user.posts == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (userName != null ? userName.hashCode() : 0);
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (bio != null ? bio.hashCode() : 0);
+        result = 31 * result + (city != null ? city.hashCode() : 0);
+        result = 31 * result + (country != null ? country.hashCode() : 0);
+        result = 31 * result + (avatar != null ? avatar.hashCode() : 0);
+        result = 31 * result + (create_date != null ? create_date.hashCode() : 0);
+        result = 31 * result + (modified_date != null ? modified_date.hashCode() : 0);
+        result = 31 * result + (posts != null ? posts.hashCode() : 0);
+        return result;
     }
 
     @Override

@@ -10,22 +10,11 @@ public class FoodPostResponseDto {
     private String originCountry;
     private int timeRequired;
     private boolean isVeganFood;
-
     private LocalDateTime created_date;
     private LocalDateTime modified_date;
-    private UserGetDto user;
 
 
-    public FoodPostResponseDto(Long id, String name, String description, String originCountry, int timeRequired, boolean isVeganFood, LocalDateTime created_date, LocalDateTime modified_date, UserGetDto user) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.originCountry = originCountry;
-        this.timeRequired = timeRequired;
-        this.isVeganFood = isVeganFood;
-        this.created_date = created_date;
-        this.modified_date = modified_date;
-        this.user = user;
+    public FoodPostResponseDto() {
     }
 
     public Long getId() {
@@ -92,15 +81,6 @@ public class FoodPostResponseDto {
         this.modified_date = modified_date;
     }
 
-    public UserGetDto getUser() {
-        return user;
-    }
-
-    public void setUser(UserGetDto user) {
-        this.user = user;
-    }
-
-
     @Override
     public String toString() {
         return "FoodPostDto{" +
@@ -112,7 +92,6 @@ public class FoodPostResponseDto {
                 ", isVeganFood=" + isVeganFood +
                 ", created_date=" + created_date +
                 ", modified_date=" + modified_date +
-                ", user=" + user +
                 '}';
     }
 }

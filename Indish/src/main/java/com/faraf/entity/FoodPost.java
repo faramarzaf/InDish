@@ -132,6 +132,42 @@ public class FoodPost {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        FoodPost foodPost = (FoodPost) o;
+
+        if (timeRequired != foodPost.timeRequired) return false;
+        if (isVeganFood != foodPost.isVeganFood) return false;
+        if (id != null ? !id.equals(foodPost.id) : foodPost.id != null) return false;
+        if (name != null ? !name.equals(foodPost.name) : foodPost.name != null) return false;
+        if (description != null ? !description.equals(foodPost.description) : foodPost.description != null)
+            return false;
+        if (originCountry != null ? !originCountry.equals(foodPost.originCountry) : foodPost.originCountry != null)
+            return false;
+        if (created_date != null ? !created_date.equals(foodPost.created_date) : foodPost.created_date != null)
+            return false;
+        if (modified_date != null ? !modified_date.equals(foodPost.modified_date) : foodPost.modified_date != null)
+            return false;
+        return user != null ? user.equals(foodPost.user) : foodPost.user == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (originCountry != null ? originCountry.hashCode() : 0);
+        result = 31 * result + timeRequired;
+        result = 31 * result + (isVeganFood ? 1 : 0);
+        result = 31 * result + (created_date != null ? created_date.hashCode() : 0);
+        result = 31 * result + (modified_date != null ? modified_date.hashCode() : 0);
+        result = 31 * result + (user != null ? user.hashCode() : 0);
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "FoodPost{" +
                 "id=" + id +

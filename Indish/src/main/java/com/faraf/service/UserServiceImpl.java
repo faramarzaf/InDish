@@ -1,26 +1,28 @@
 package com.faraf.service;
 
-import com.faraf.dto.FoodPostRequestDto;
-import com.faraf.dto.UserGetDto;
-import com.faraf.dto.UserInfoUpdateRequestDto;
-import com.faraf.dto.UserPostDto;
+import com.faraf.dto.*;
 import com.faraf.entity.User;
 import com.faraf.exception.DuplicatedRecordException;
 import com.faraf.exception.NotFoundException;
+import com.faraf.mapper.FoodMapper;
 import com.faraf.mapper.UserMapper;
 import com.faraf.repository.UserRepository;
 import com.faraf.utility.GeneralMessages;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
+import java.io.FileReader;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -29,14 +31,20 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository repository;
     private final UserMapper userMapper;
+    private final FoodMapper foodMapper;
+
     private final PasswordEncoder passwordEncoder;
     private final GeneralMessages generalMessages;
 
     @Override
     @Transactional
-    public HashMap<String, String> save(UserPostDto user) {
-        HashMap<String, String> response = new HashMap<>();
-        return validateUser(response, user);
+    public UserGetDto save(UserPostDto userPostDto) {
+        if (validateUser(userPostDto)) {
+            User user = userMapper.toEntity(userPostDto);
+            user.setPassword(passwordEncoder.encode(userPostDto.getPassword()));
+            repository.save(user);
+            return userMapper.toUserGet(user);
+        } else return null;
     }
 
 /*    @Override
@@ -64,22 +72,42 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserGetDto updateUserInfo(UserInfoUpdateRequestDto user, Long id) {
+    public void updateUserInfo(UserInfoUpdateRequestDto user, Long id) {
         UserGetDto userById = getUserById(id);
         userById.setBio(user.getBio());
         userById.setCity(user.getCity());
         userById.setCountry(user.getCountry());
         userById.setAvatar(user.getAvatar());
-        userById.setPosts(user.getPosts());
-        User userToSave = repository.save(userMapper.toEntity(userById));
-        return userMapper.toUserGet(userToSave);
+
+/*        FoodPostResponseDto foodPostResponseDto = new FoodPostResponseDto();
+        foodPostResponseDto.setName("");
+        foodPostResponseDto.setDescription("");
+        foodPostResponseDto.setOriginCountry("");
+        foodPostResponseDto.setTimeRequired(2);
+        foodPostResponseDto.setVeganFood(false);
+
+        List<FoodPostResponseDto> list = new ArrayList<>();
+        list.add(foodPostResponseDto);*/
+
+
+        User user1 = userMapper.toEntity(userById);
+
+        repository.save(user1);
     }
 
     @Override
     @Transactional
     public void addFoodToUser(Long userId, FoodPostRequestDto requestDto) {//bug audit of each child food entity updates at all in each add food call
         UserGetDto userById = getUserById(userId);
-        userById.getPosts().add(requestDto);
+
+        FoodPostResponseDto foodPostResponseDto = new FoodPostResponseDto();
+        foodPostResponseDto.setName(requestDto.getName());
+        foodPostResponseDto.setDescription(requestDto.getDescription());
+        foodPostResponseDto.setOriginCountry(requestDto.getOriginCountry());
+        foodPostResponseDto.setTimeRequired(requestDto.getTimeRequired());
+        foodPostResponseDto.setVeganFood(requestDto.getIsVeganFood());
+
+        userById.getPosts().add(foodPostResponseDto);
         User user = userMapper.toEntity(userById);
         repository.save(user);
     }
@@ -102,7 +130,8 @@ public class UserServiceImpl implements UserService {
     public UserGetDto getUserByEmail(String email) {
         Optional<User> userByEmail = repository.findByEmail(email);
         User user = userByEmail.orElseThrow(() -> new NotFoundException(generalMessages.getMsgUserNotFoundWithEmail() + email));
-        return userMapper.toUserGet(user);
+        UserGetDto userGetDto = userMapper.toUserGet(user);
+        return userGetDto;
     }
 
     @Override
@@ -132,31 +161,15 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    private HashMap<String, String> validateUser(HashMap<String, String> response, UserPostDto userPostDto) {
-
+    private boolean validateUser(UserPostDto userPostDto) {
         if (repository.existsUserByUserName(userPostDto.getUserName())) {
             throw new DuplicatedRecordException(generalMessages.getMsgDuplicatedUsername());
 
         } else if (repository.existsUserByEmail(userPostDto.getEmail())) {
             throw new DuplicatedRecordException(generalMessages.getMsgDuplicatedEmail());
 
-        } else if (!repository.existsUserByUserName(userPostDto.getUserName()) || !repository.existsUserByEmail(userPostDto.getEmail())) {
-            saveUser(userPostDto);
-            setSuccessfulResponseMessages(response, userPostDto, HttpStatus.OK);
-        }
-        return response;
-    }
-
-    private void saveUser(UserPostDto userPostDto) {
-        User user = userMapper.toEntity(userPostDto);
-        user.setPassword(passwordEncoder.encode(userPostDto.getPassword()));
-        repository.save(user);
-    }
-
-    private void setSuccessfulResponseMessages(HashMap<String, String> response, UserPostDto userPostDto, HttpStatus httpStatus) {
-        response.put("status", httpStatus.toString());
-        response.put("message", userPostDto.toString() + " saved successfully!");
-        response.put("created_at", LocalDateTime.now().toString());
+        } else
+            return !repository.existsUserByUserName(userPostDto.getUserName()) && !repository.existsUserByEmail(userPostDto.getEmail());
     }
 
 }

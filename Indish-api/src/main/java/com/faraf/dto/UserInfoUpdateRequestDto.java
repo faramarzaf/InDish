@@ -9,17 +9,16 @@ public class UserInfoUpdateRequestDto {
     private String city;
     private String country;
     private String avatar;
-    private List<FoodPostRequestDto> posts = new ArrayList<>();
 
     public UserInfoUpdateRequestDto() {
     }
 
-    public UserInfoUpdateRequestDto(String bio, String city, String country, String avatar, List<FoodPostRequestDto> posts) {
+    public UserInfoUpdateRequestDto(String bio, String city, String country, String avatar ) {
         this.bio = bio;
         this.city = city;
         this.country = country;
         this.avatar = avatar;
-        this.posts = posts;
+
     }
 
     public String getBio() {
@@ -54,14 +53,6 @@ public class UserInfoUpdateRequestDto {
         this.avatar = avatar;
     }
 
-    public List<FoodPostRequestDto> getPosts() {
-        return posts;
-    }
-
-    public void setPosts(List<FoodPostRequestDto> posts) {
-        this.posts = posts;
-    }
-
 
     @Override
     public String toString() {
@@ -70,7 +61,6 @@ public class UserInfoUpdateRequestDto {
                 ", city='" + city + '\'' +
                 ", country='" + country + '\'' +
                 ", avatar='" + avatar + '\'' +
-                ", posts=" + posts +
                 '}';
     }
 }
