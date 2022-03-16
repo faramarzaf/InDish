@@ -1,24 +1,23 @@
 package com.faraf.service;
 
-import com.faraf.dto.FoodPostRequestDto;
 import com.faraf.dto.UserGetDto;
 import com.faraf.dto.UserInfoUpdateRequestDto;
 import com.faraf.dto.UserPostDto;
-import com.faraf.entity.FoodPost;
 import com.faraf.entity.User;
 import com.faraf.exception.DuplicatedRecordException;
 import com.faraf.exception.NotFoundException;
-import com.faraf.mapper.FoodMapper;
 import com.faraf.mapper.UserMapper;
-import com.faraf.repository.FoodPostRepository;
 import com.faraf.repository.UserRepository;
 import com.faraf.utility.GeneralMessages;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -26,9 +25,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final FoodPostRepository foodPostRepository;
     private final UserMapper userMapper;
-    private final FoodMapper foodMapper;
     private final PasswordEncoder passwordEncoder;
     private final GeneralMessages generalMessages;
 
@@ -43,29 +40,6 @@ public class UserServiceImpl implements UserService {
         } else return null;
     }
 
-/*    @Override
-    public List<UserGetDto> getAllUsers(Integer pageNo, Integer pageSize, String sortBy) {
-        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
-        Page<User> userPage = repository.findAll(paging);
-        int totalElements = (int) userPage.getTotalElements();
-        PageImpl<UserGetDto> userGetDtoPage = new PageImpl<>(userPage.getContent()
-                .stream()
-                .map(user -> new UserGetDto(
-                        user.getId(),
-                        user.getUserName(),
-                        user.getEmail(),
-                        user.getPassword(),
-                        user.getUserProfile(),
-                        user.getPosts(),
-                        user.getJoinedOn()
-
-                        )
-                )
-                .collect(Collectors.toList()), paging, totalElements);
-
-        return userGetDtoPage.getContent();
-    }*/
-
     @Override
     @Transactional
     public void updateUserInfo(UserInfoUpdateRequestDto user, Long id) {
@@ -79,22 +53,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
-    public void addFoodToUser(FoodPostRequestDto requestDto) {//bug audit of each child food entity updates at all in each add food call
-/*        UserGetDto userById = getUserById(userId);
-        FoodPostResponseDto foodPostResponseDto = new FoodPostResponseDto();
-        foodPostResponseDto.setName(requestDto.getName());
-        foodPostResponseDto.setDescription(requestDto.getDescription());
-        foodPostResponseDto.setOriginCountry(requestDto.getOriginCountry());
-        foodPostResponseDto.setTimeRequired(requestDto.getTimeRequired());
-        foodPostResponseDto.setVeganFood(requestDto.getIsVeganFood());
-        User user = userMapper.toEntity(userById);*/
-
-
-        FoodPost foodPost = foodMapper.toEntity(requestDto);
-        foodPostRepository.save(foodPost);
-
-        // userRepository.save(user);
+    public List<UserGetDto> getAllUsers(Integer pageNo, Integer pageSize, String sortBy) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+        Page<User> users = userRepository.findAll(pageable);
+        PageImpl<UserGetDto> responseDtoPage = new PageImpl<>(users.getContent()
+                .stream()
+                .map(user -> new UserGetDto(user.getId(), user.getUserName(),
+                        user.getEmail(), user.getCountry(),
+                        user.getCity(), user.getPassword(),
+                        user.getBio(), user.getAvatar(),
+                        user.getCreate_date(), user.getModified_date()))
+                .collect(Collectors.toList())
+        );
+        return responseDtoPage.getContent();
     }
 
     @Override

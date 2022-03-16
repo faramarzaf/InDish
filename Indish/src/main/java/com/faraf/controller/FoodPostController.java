@@ -56,7 +56,7 @@ public class FoodPostController {
 
     @PostMapping("/save")
     public void postFood(@RequestBody FoodPostRequestDto requestDto) {
-        foodPostService.addFoodPost(requestDto);
+        foodPostService.addFoodToUser(requestDto);
     }
 
     @PutMapping("/update")

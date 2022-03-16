@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,14 +19,13 @@ public class UserController {
 
     private final UserService userService;
 
-/*    @GetMapping
-    public ResponseEntity<List<UserGetDto>> getAll(
+    @GetMapping
+    public List<UserGetDto> getAll(
             @RequestParam(defaultValue = "0") Integer pageNo,
             @RequestParam(defaultValue = "10") Integer pageSize,
             @RequestParam(defaultValue = "id") String sortBy) {
-        List<UserGetDto> list = service.getAllUsers(pageNo, pageSize, sortBy);
-        return new ResponseEntity<>(list, new HttpHeaders(), HttpStatus.OK);
-    }*/
+        return userService.getAllUsers(pageNo, pageSize, sortBy);
+    }
 
     @RequestMapping(params = "username", method = RequestMethod.GET)
     public UserGetDto findByUsername(@RequestParam("username") String username) {

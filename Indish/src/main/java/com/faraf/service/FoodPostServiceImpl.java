@@ -19,12 +19,13 @@ public class FoodPostServiceImpl implements FoodPostService {
 
 
     private final FoodPostRepository foodPostRepository;
-    private final UserService userService;
     private final FoodMapper foodMapper;
 
     @Override
-    public void addFoodPost(FoodPostRequestDto requestDto) {
-        userService.addFoodToUser(requestDto);
+    @Transactional
+    public void addFoodToUser(FoodPostRequestDto requestDto) {
+        FoodPost foodPost = foodMapper.toEntity(requestDto);
+        foodPostRepository.save(foodPost);
     }
 
     @Override

@@ -1,10 +1,11 @@
 package com.faraf.service;
 
 
-import com.faraf.dto.FoodPostRequestDto;
 import com.faraf.dto.UserGetDto;
 import com.faraf.dto.UserInfoUpdateRequestDto;
 import com.faraf.dto.UserPostDto;
+
+import java.util.List;
 
 public interface UserService {
 
@@ -12,9 +13,7 @@ public interface UserService {
 
     void updateUserInfo(UserInfoUpdateRequestDto user, Long id);
 
-    void addFoodToUser(FoodPostRequestDto foodPostRequestDto);
-
-    //  List<UserGetDto> getAllUsers(Integer pageNo, Integer pageSize, String sortBy);
+    List<UserGetDto> getAllUsers(Integer pageNo, Integer pageSize, String sortBy);
 
     UserGetDto getUserById(Long id);
 

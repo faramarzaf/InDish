@@ -8,7 +8,8 @@ import java.util.List;
 
 public interface FoodPostService {
 
-    void addFoodPost(FoodPostRequestDto requestDto);
+
+    void addFoodToUser(FoodPostRequestDto requestDto);
 
     List<FoodPostResponseDto> findAllByUsername(String username);
 
