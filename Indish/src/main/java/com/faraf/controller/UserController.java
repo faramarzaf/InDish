@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
 
 @RestController
 @RequiredArgsConstructor
@@ -45,7 +44,7 @@ public class UserController {
     }
 
     @PutMapping("/update")
-    public void update(@RequestBody UserInfoUpdateRequestDto user, @RequestParam("id") Long id) {
+    public void update(@RequestBody UserInfoUpdateRequestDto user, @RequestParam("userId") Long id) {
         userService.updateUserInfo(user, id);
     }
 

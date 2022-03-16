@@ -2,10 +2,8 @@ package com.faraf.service;
 
 
 import com.faraf.dto.FoodPostRequestDto;
-import com.faraf.dto.UserGetDto;
-import com.faraf.dto.UserPostDto;
+import com.faraf.dto.FoodPostResponseDto;
 import com.faraf.entity.FoodPost;
-import com.faraf.entity.User;
 import com.faraf.mapper.FoodMapper;
 import com.faraf.mapper.UserMapper;
 import com.faraf.repository.FoodPostRepository;
@@ -29,25 +27,48 @@ public class FoodPostServiceImpl implements FoodPostService {
     @Autowired
     private FoodMapper foodMapper;
 
-    public List<User> getAllByName(String name) {
-        return foodPostRepository.findByPosts_nameIgnoreCase(name);
-    }
-
-    public List<User> getAllByCountry(String country) {
-        return foodPostRepository.findByPosts_originCountryIgnoreCase(country);
-    }
-
-    public List<User> getAllByTimeRequired(int timeRequired) {
-        return foodPostRepository.findByPosts_timeRequired(timeRequired);
+    @Override
+    public void addFoodPost(FoodPostRequestDto requestDto) {
+        userService.addFoodToUser(requestDto);
     }
 
     @Override
-    public void addFoodPost(Long userId, FoodPostRequestDto requestDto) {
-        userService.addFoodToUser(userId, requestDto);
+    public List<FoodPostResponseDto> findAllByUsername(String username) {
+        List<FoodPost> allByUser_userName = foodPostRepository.findByUser_UserName(username);
+        return foodMapper.toFoodPostResponseDto(allByUser_userName);
     }
 
     @Override
-    public void updateFoodPost(Long userId, Long foodPostId) {
+    public List<FoodPostResponseDto> findAllByOriginCountry(String country) {
+        return foodMapper.toFoodPostResponseDto(foodPostRepository.findAllByOriginCountry(country));
+    }
+
+    @Override
+    public List<FoodPostResponseDto> findAllByVeganFoodTrue() {
+        return foodMapper.toFoodPostResponseDto(foodPostRepository.findAllByVeganFoodTrue());
+
+    }
+
+    @Override
+    public List<FoodPostResponseDto> findAllByVeganFoodFalse() {
+        return foodMapper.toFoodPostResponseDto(foodPostRepository.findAllByVeganFoodFalse());
+
+    }
+
+    @Override
+    public List<FoodPostResponseDto> findAllByTimeRequiredEquals(int hour) {
+        return foodMapper.toFoodPostResponseDto(foodPostRepository.findAllByTimeRequiredEquals(hour));
+
+    }
+
+    @Override
+    public List<FoodPostResponseDto> findAllByTimeRequiredBetween(int startHour, int endHour) {
+        return foodMapper.toFoodPostResponseDto(foodPostRepository.findAllByTimeRequiredBetween(startHour, endHour));
+
+    }
+
+    @Override
+    public void updateFoodPost(Long foodPostId) {
 
     }
 }

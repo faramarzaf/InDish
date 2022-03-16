@@ -2,21 +2,31 @@ package com.faraf.dto;
 
 public class FoodPostRequestDto {
 
+    private Long userId;
     private String name;
     private String description;
     private String originCountry;
     private int timeRequired;
-    private boolean isVeganFood;
+    private boolean veganFood;
 
     public FoodPostRequestDto() {
     }
 
-    public FoodPostRequestDto(String name, String description, String originCountry, int timeRequired, boolean isVeganFood) {
+    public FoodPostRequestDto(Long userId, String name, String description, String originCountry, int timeRequired, boolean veganFood) {
+        this.userId = userId;
         this.name = name;
         this.description = description;
         this.originCountry = originCountry;
         this.timeRequired = timeRequired;
-        this.isVeganFood = isVeganFood;
+        this.veganFood = veganFood;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getName() {
@@ -51,23 +61,23 @@ public class FoodPostRequestDto {
         this.timeRequired = timeRequired;
     }
 
-    public Boolean getIsVeganFood() {
-        return isVeganFood;
+    public boolean isVeganFood() {
+        return veganFood;
     }
 
-    public void setIsVeganFood(Boolean veganFood) {
-        isVeganFood = veganFood;
+    public void setVeganFood(boolean veganFood) {
+        this.veganFood = veganFood;
     }
-
 
     @Override
     public String toString() {
         return "FoodPostRequestDto{" +
-                "name='" + name + '\'' +
+                "userId=" + userId +
+                ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", originCountry='" + originCountry + '\'' +
                 ", timeRequired=" + timeRequired +
-                ", isVeganFood=" + isVeganFood +
+                ", isVeganFood=" + veganFood +
                 '}';
     }
 }

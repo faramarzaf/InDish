@@ -2,8 +2,6 @@ package com.faraf.dto;
 
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class UserGetDto {
@@ -16,14 +14,13 @@ public class UserGetDto {
     private String password;
     private String bio;
     private String avatar;
-    private List<FoodPostResponseDto> posts = new ArrayList<>();
     private LocalDateTime create_date;
     private LocalDateTime modified_date;
 
     public UserGetDto() {
     }
 
-    public UserGetDto(Long id, String userName, String email, String country, String city, String password, String bio, String avatar, List<FoodPostResponseDto> posts, LocalDateTime create_date, LocalDateTime modified_date) {
+    public UserGetDto(Long id, String userName, String email, String country, String city, String password, String bio, String avatar, LocalDateTime create_date, LocalDateTime modified_date) {
         this.id = id;
         this.userName = userName;
         this.email = email;
@@ -32,7 +29,6 @@ public class UserGetDto {
         this.password = password;
         this.bio = bio;
         this.avatar = avatar;
-        this.posts = posts;
         this.create_date = create_date;
         this.modified_date = modified_date;
     }
@@ -75,14 +71,6 @@ public class UserGetDto {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public List<FoodPostResponseDto> getPosts() {
-        return posts;
-    }
-
-    public void setPosts(List<FoodPostResponseDto> posts) {
-        this.posts = posts;
     }
 
     public String getAvatar() {
@@ -136,7 +124,6 @@ public class UserGetDto {
                 ", password='" + password + '\'' +
                 ", bio='" + bio + '\'' +
                 ", avatar='" + avatar + '\'' +
-                ", posts=" + posts +
                 ", create_date=" + create_date +
                 ", modified_date=" + modified_date +
                 '}';

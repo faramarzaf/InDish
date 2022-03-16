@@ -1,6 +1,5 @@
 package com.faraf.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -28,8 +27,8 @@ public class FoodPost {
     @Column(name = "time_required")
     private int timeRequired;
 
-    @Column(name = "is_vegan_food")
-    private boolean isVeganFood;
+    @Column(name = "veganFood")
+    private boolean veganFood;
 
     @Column(name = "created_date")
     @CreationTimestamp
@@ -39,20 +38,20 @@ public class FoodPost {
     @Column(name = "modified_date")
     private LocalDateTime modified_date;
 
-    @ManyToOne
-    @JoinColumn(name = "fp_fid",referencedColumnName = "id")
+    @ManyToOne(targetEntity = User.class)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
     public FoodPost() {
     }
 
-    public FoodPost(Long id, String name, String description, String originCountry, int timeRequired, boolean isVeganFood, LocalDateTime created_date,LocalDateTime modified_date, User user) {
+    public FoodPost(Long id, String name, String description, String originCountry, int timeRequired, boolean veganFood, LocalDateTime created_date, LocalDateTime modified_date, User user) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.originCountry = originCountry;
         this.timeRequired = timeRequired;
-        this.isVeganFood = isVeganFood;
+        this.veganFood = veganFood;
         this.created_date = created_date;
         this.modified_date = modified_date;
         this.user = user;
@@ -99,11 +98,11 @@ public class FoodPost {
     }
 
     public boolean isVeganFood() {
-        return isVeganFood;
+        return veganFood;
     }
 
     public void setVeganFood(boolean veganFood) {
-        isVeganFood = veganFood;
+        this.veganFood = veganFood;
     }
 
     public LocalDateTime getCreated_date() {
@@ -122,7 +121,7 @@ public class FoodPost {
         this.modified_date = modified_date;
     }
 
-   // @JsonIgnore
+    // @JsonIgnore
     public User getUser() {
         return user;
     }
@@ -139,7 +138,7 @@ public class FoodPost {
         FoodPost foodPost = (FoodPost) o;
 
         if (timeRequired != foodPost.timeRequired) return false;
-        if (isVeganFood != foodPost.isVeganFood) return false;
+        if (veganFood != foodPost.veganFood) return false;
         if (id != null ? !id.equals(foodPost.id) : foodPost.id != null) return false;
         if (name != null ? !name.equals(foodPost.name) : foodPost.name != null) return false;
         if (description != null ? !description.equals(foodPost.description) : foodPost.description != null)
@@ -160,7 +159,7 @@ public class FoodPost {
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (originCountry != null ? originCountry.hashCode() : 0);
         result = 31 * result + timeRequired;
-        result = 31 * result + (isVeganFood ? 1 : 0);
+        result = 31 * result + (veganFood ? 1 : 0);
         result = 31 * result + (created_date != null ? created_date.hashCode() : 0);
         result = 31 * result + (modified_date != null ? modified_date.hashCode() : 0);
         result = 31 * result + (user != null ? user.hashCode() : 0);
@@ -175,7 +174,7 @@ public class FoodPost {
                 ", description='" + description + '\'' +
                 ", originCountry='" + originCountry + '\'' +
                 ", timeRequired=" + timeRequired +
-                ", isVeganFood=" + isVeganFood +
+                ", isVeganFood=" + veganFood +
                 ", created_date=" + created_date +
                 ", modified_date=" + modified_date +
                 ", user=" + user +

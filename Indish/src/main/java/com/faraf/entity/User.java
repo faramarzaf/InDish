@@ -8,8 +8,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "t_user", uniqueConstraints = {
@@ -57,19 +55,10 @@ public class User {
     @Column(name = "modified_date")
     private LocalDateTime modified_date;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "fp_fid", referencedColumnName = "id")
-    private List<FoodPost> posts = new ArrayList<>();
-
-    public void addFoodToUser(FoodPost foodPost) {
-        foodPost.setUser(this);
-        this.posts.add(foodPost);
-    }
-
     public User() {
     }
 
-    public User(Long id, String userName, String email, String password, String bio, String city, String country, String avatar, LocalDateTime create_date, LocalDateTime modified_date, List<FoodPost> posts) {
+    public User(Long id, String userName, String email, String password, String bio, String city, String country, String avatar, LocalDateTime create_date, LocalDateTime modified_date) {
         this.id = id;
         this.userName = userName;
         this.email = email;
@@ -80,7 +69,7 @@ public class User {
         this.avatar = avatar;
         this.create_date = create_date;
         this.modified_date = modified_date;
-        this.posts = posts;
+
     }
 
     public Long getId() {
@@ -155,15 +144,6 @@ public class User {
         this.create_date = joinedOn;
     }
 
-
-    public List<FoodPost> getPosts() {
-        return posts;
-    }
-
-    public void setPosts(List<FoodPost> posts) {
-        this.posts = posts;
-    }
-
     public LocalDateTime getModified_date() {
         return modified_date;
     }
@@ -188,9 +168,7 @@ public class User {
         if (country != null ? !country.equals(user.country) : user.country != null) return false;
         if (avatar != null ? !avatar.equals(user.avatar) : user.avatar != null) return false;
         if (create_date != null ? !create_date.equals(user.create_date) : user.create_date != null) return false;
-        if (modified_date != null ? !modified_date.equals(user.modified_date) : user.modified_date != null)
-            return false;
-        return posts != null ? posts.equals(user.posts) : user.posts == null;
+        return modified_date != null ? modified_date.equals(user.modified_date) : user.modified_date == null;
     }
 
     @Override
@@ -205,7 +183,6 @@ public class User {
         result = 31 * result + (avatar != null ? avatar.hashCode() : 0);
         result = 31 * result + (create_date != null ? create_date.hashCode() : 0);
         result = 31 * result + (modified_date != null ? modified_date.hashCode() : 0);
-        result = 31 * result + (posts != null ? posts.hashCode() : 0);
         return result;
     }
 
@@ -220,8 +197,8 @@ public class User {
                 ", city='" + city + '\'' +
                 ", country='" + country + '\'' +
                 ", avatar='" + avatar + '\'' +
-                ", joinedOn=" + create_date +
-                ", posts=" + posts +
+                ", create_date=" + create_date +
+                ", modified_date=" + modified_date +
                 '}';
     }
 }

@@ -6,8 +6,6 @@ import org.springframework.stereotype.Component;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.List;
 
 
 @Component
@@ -30,21 +28,18 @@ public class UserPostDto {
 
     private String country;
 
-    private String  avatar;
-
-    private List<FoodPostRequestDto> posts = new ArrayList<>();
+    private String avatar;
 
     public UserPostDto() {
     }
 
-    public UserPostDto(String userName, String email, String password, String bio, String city, String country,String avatar, List<FoodPostRequestDto> posts) {
+    public UserPostDto(String userName, String email, String password, String bio, String city, String country, String avatar) {
         this.userName = userName;
         this.email = email;
         this.password = password;
         this.bio = bio;
         this.city = city;
         this.country = country;
-        this.posts = posts;
         this.avatar = avatar;
     }
 
@@ -70,14 +65,6 @@ public class UserPostDto {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public List<FoodPostRequestDto> getPosts() {
-        return posts;
-    }
-
-    public void setPosts(List<FoodPostRequestDto> posts) {
-        this.posts = posts;
     }
 
     public String getBio() {
@@ -112,7 +99,6 @@ public class UserPostDto {
         this.avatar = avatar;
     }
 
-
     @Override
     public String toString() {
         return "UserPostDto{" +
@@ -123,7 +109,6 @@ public class UserPostDto {
                 ", city='" + city + '\'' +
                 ", country='" + country + '\'' +
                 ", avatar='" + avatar + '\'' +
-                ", posts=" + posts +
                 '}';
     }
 }

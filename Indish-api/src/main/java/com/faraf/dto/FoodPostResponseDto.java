@@ -9,7 +9,7 @@ public class FoodPostResponseDto {
     private String description;
     private String originCountry;
     private int timeRequired;
-    private boolean isVeganFood;
+    private boolean veganFood;
     private LocalDateTime created_date;
     private LocalDateTime modified_date;
 
@@ -58,11 +58,11 @@ public class FoodPostResponseDto {
     }
 
     public boolean isVeganFood() {
-        return isVeganFood;
+        return veganFood;
     }
 
     public void setVeganFood(boolean veganFood) {
-        isVeganFood = veganFood;
+        this.veganFood = veganFood;
     }
 
     public LocalDateTime getCreated_date() {
@@ -89,7 +89,7 @@ public class FoodPostResponseDto {
                 ", description='" + description + '\'' +
                 ", originCountry='" + originCountry + '\'' +
                 ", timeRequired=" + timeRequired +
-                ", isVeganFood=" + isVeganFood +
+                ", isVeganFood=" + veganFood +
                 ", created_date=" + created_date +
                 ", modified_date=" + modified_date +
                 '}';

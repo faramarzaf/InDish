@@ -1,8 +1,5 @@
 package com.faraf.dto;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class UserInfoUpdateRequestDto {
 
     private String bio;
@@ -13,7 +10,7 @@ public class UserInfoUpdateRequestDto {
     public UserInfoUpdateRequestDto() {
     }
 
-    public UserInfoUpdateRequestDto(String bio, String city, String country, String avatar ) {
+    public UserInfoUpdateRequestDto(String bio, String city, String country, String avatar) {
         this.bio = bio;
         this.city = city;
         this.country = country;

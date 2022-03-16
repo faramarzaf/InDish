@@ -1,14 +1,26 @@
 package com.faraf.service;
 
 import com.faraf.dto.FoodPostRequestDto;
+import com.faraf.dto.FoodPostResponseDto;
 
 import java.util.List;
 
 public interface FoodPostService {
 
+    void addFoodPost(FoodPostRequestDto requestDto);
 
-    void addFoodPost(Long userId,  FoodPostRequestDto requestDto);
+    List<FoodPostResponseDto> findAllByUsername(String username);
 
-    void updateFoodPost(Long userId, Long foodPostId);
+    List<FoodPostResponseDto> findAllByOriginCountry(String country);
+
+    List<FoodPostResponseDto> findAllByVeganFoodTrue();
+
+    List<FoodPostResponseDto> findAllByVeganFoodFalse();
+
+    List<FoodPostResponseDto> findAllByTimeRequiredEquals(int hour);
+
+    List<FoodPostResponseDto> findAllByTimeRequiredBetween(int startHour, int endHour);
+
+    void updateFoodPost(Long foodPostId);
 
 }
