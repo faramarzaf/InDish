@@ -3,29 +3,24 @@ package com.faraf.service;
 
 import com.faraf.dto.FoodPostRequestDto;
 import com.faraf.dto.FoodPostResponseDto;
+import com.faraf.dto.FoodPostUpdateRequestDto;
 import com.faraf.entity.FoodPost;
 import com.faraf.mapper.FoodMapper;
-import com.faraf.mapper.UserMapper;
 import com.faraf.repository.FoodPostRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class FoodPostServiceImpl implements FoodPostService {
 
-    @Autowired
-    private FoodPostRepository foodPostRepository;
 
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private UserMapper userMapper;
-
-    @Autowired
-    private FoodMapper foodMapper;
+    private final FoodPostRepository foodPostRepository;
+    private final UserService userService;
+    private final FoodMapper foodMapper;
 
     @Override
     public void addFoodPost(FoodPostRequestDto requestDto) {
@@ -68,7 +63,14 @@ public class FoodPostServiceImpl implements FoodPostService {
     }
 
     @Override
-    public void updateFoodPost(Long foodPostId) {
-
+    @Transactional
+    public void updateFoodPost(FoodPostUpdateRequestDto requestDto) {
+        FoodPost byId = foodPostRepository.findById(requestDto.getFoodPostId());
+        byId.setName(requestDto.getName());
+        byId.setDescription(requestDto.getDescription());
+        byId.setOriginCountry(requestDto.getOriginCountry());
+        byId.setTimeRequired(requestDto.getTimeRequired());
+        byId.setVeganFood(requestDto.isVeganFood());
+        foodPostRepository.save(byId);
     }
 }

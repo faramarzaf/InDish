@@ -27,10 +27,8 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final FoodPostRepository foodPostRepository;
-
     private final UserMapper userMapper;
     private final FoodMapper foodMapper;
-
     private final PasswordEncoder passwordEncoder;
     private final GeneralMessages generalMessages;
 

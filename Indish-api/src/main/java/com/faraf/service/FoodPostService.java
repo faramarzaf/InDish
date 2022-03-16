@@ -2,6 +2,7 @@ package com.faraf.service;
 
 import com.faraf.dto.FoodPostRequestDto;
 import com.faraf.dto.FoodPostResponseDto;
+import com.faraf.dto.FoodPostUpdateRequestDto;
 
 import java.util.List;
 
@@ -21,6 +22,6 @@ public interface FoodPostService {
 
     List<FoodPostResponseDto> findAllByTimeRequiredBetween(int startHour, int endHour);
 
-    void updateFoodPost(Long foodPostId);
+    void updateFoodPost(FoodPostUpdateRequestDto requestDto);
 
 }

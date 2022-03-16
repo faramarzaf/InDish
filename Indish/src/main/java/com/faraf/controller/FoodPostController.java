@@ -3,6 +3,7 @@ package com.faraf.controller;
 
 import com.faraf.dto.FoodPostRequestDto;
 import com.faraf.dto.FoodPostResponseDto;
+import com.faraf.dto.FoodPostUpdateRequestDto;
 import com.faraf.service.FoodPostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -58,4 +59,8 @@ public class FoodPostController {
         foodPostService.addFoodPost(requestDto);
     }
 
+    @PutMapping("/update")
+    public void updateFood(@RequestBody FoodPostUpdateRequestDto requestDto) {
+        foodPostService.updateFoodPost(requestDto);
+    }
 }
