@@ -27,7 +27,7 @@ public class FoodPost {
     @Column(name = "time_required")
     private int timeRequired;
 
-    @Column(name = "veganFood")
+    @Column(name = "vegan_food",columnDefinition = "TINYINT", length = 1)
     private boolean veganFood;
 
     @Column(name = "created_date")
