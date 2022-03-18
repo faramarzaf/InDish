@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface FoodPostService {
 
+    FoodPostResponseDto findById(long id);
 
     void addFoodToUser(FoodPostRequestDto requestDto);
 

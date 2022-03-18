@@ -44,5 +44,9 @@ public class GeneralMessages {
         return environment.getProperty("userNotFoundWithEmail");
     }
 
+    @Bean
+    public String getMsgFoodNotFoundWithId() {
+        return environment.getProperty("foodNotFoundWithId");
+    }
 
 }

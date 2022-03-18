@@ -13,10 +13,14 @@ public interface FoodMapper {
 
     List<FoodPost> toEntity(List<FoodPostRequestDto> foodPostRequestDtos);
 
+    FoodPost toEntity (FoodPostResponseDto foodPostResponseDto);
+
     @Mapping(source = "foodPostRequestDto.userId", target = "user.id")
     FoodPost toEntity(FoodPostRequestDto foodPostRequestDto);
 
     List<FoodPostResponseDto> toFoodPostResponseDto(List<FoodPost> foodPostList);
+
+    FoodPostResponseDto toFoodPostResponseDto(FoodPost foodPost);
 
     FoodPostRequestDto toFoodPostRequestDto(FoodPost foodPost);
 

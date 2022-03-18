@@ -19,6 +19,11 @@ public class FoodPostController {
 
     private final FoodPostService foodPostService;
 
+    @GetMapping("/by-id")
+    public FoodPostResponseDto findById(@RequestParam Long id){
+       return foodPostService.findById(id);
+    }
+
     @GetMapping("by-username")
     public List<FoodPostResponseDto> findAllByUsername(@RequestParam String username) {
         return foodPostService.findAllByUsername(username);

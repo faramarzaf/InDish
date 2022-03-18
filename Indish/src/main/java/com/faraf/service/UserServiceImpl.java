@@ -86,8 +86,7 @@ public class UserServiceImpl implements UserService {
     public UserGetDto getUserByEmail(String email) {
         Optional<User> userByEmail = userRepository.findByEmail(email);
         User user = userByEmail.orElseThrow(() -> new NotFoundException(generalMessages.getMsgUserNotFoundWithEmail() + email));
-        UserGetDto userGetDto = userMapper.toUserGet(user);
-        return userGetDto;
+        return userMapper.toUserGet(user);
     }
 
     @Override

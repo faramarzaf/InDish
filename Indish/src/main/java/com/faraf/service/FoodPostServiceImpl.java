@@ -5,13 +5,16 @@ import com.faraf.dto.FoodPostRequestDto;
 import com.faraf.dto.FoodPostResponseDto;
 import com.faraf.dto.FoodPostUpdateRequestDto;
 import com.faraf.entity.FoodPost;
+import com.faraf.exception.NotFoundException;
 import com.faraf.mapper.FoodMapper;
 import com.faraf.repository.FoodPostRepository;
+import com.faraf.utility.GeneralMessages;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +23,16 @@ public class FoodPostServiceImpl implements FoodPostService {
 
     private final FoodPostRepository foodPostRepository;
     private final FoodMapper foodMapper;
+    private final GeneralMessages generalMessages;
+
+    @Override
+    public FoodPostResponseDto findById(long id) {
+        Optional<FoodPost> optFoodPost = foodPostRepository.findById(id);
+        if (optFoodPost.isPresent()) {
+            FoodPost foodPost = optFoodPost.get();
+            return foodMapper.toFoodPostResponseDto(foodPost);
+        } else throw new NotFoundException(generalMessages.getMsgFoodNotFoundWithId() + id);
+    }
 
     @Override
     @Transactional
@@ -66,12 +79,13 @@ public class FoodPostServiceImpl implements FoodPostService {
     @Override
     @Transactional
     public void updateFoodPost(FoodPostUpdateRequestDto requestDto) {
-        FoodPost byId = foodPostRepository.findById(requestDto.getFoodPostId());
-        byId.setName(requestDto.getName());
-        byId.setDescription(requestDto.getDescription());
-        byId.setOriginCountry(requestDto.getOriginCountry());
-        byId.setTimeRequired(requestDto.getTimeRequired());
-        byId.setVeganFood(requestDto.isVeganFood());
-        foodPostRepository.save(byId);
+        FoodPostResponseDto foodPostResponseDto = findById(requestDto.getFoodPostId());
+        FoodPost foodPostById = foodMapper.toEntity(foodPostResponseDto);
+        foodPostById.setName(requestDto.getName());
+        foodPostById.setDescription(requestDto.getDescription());
+        foodPostById.setOriginCountry(requestDto.getOriginCountry());
+        foodPostById.setTimeRequired(requestDto.getTimeRequired());
+        foodPostById.setVeganFood(requestDto.isVeganFood());
+        foodPostRepository.save(foodPostById);
     }
 }

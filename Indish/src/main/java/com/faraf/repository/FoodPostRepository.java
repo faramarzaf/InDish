@@ -7,9 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface FoodPostRepository extends PagingAndSortingRepository<FoodPost, Integer> {
-
-    FoodPost findById(long id);
+public interface FoodPostRepository extends PagingAndSortingRepository<FoodPost, Long> {
 
     List<FoodPost> findByUser_UserName(String username);
 

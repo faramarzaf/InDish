@@ -27,6 +27,11 @@ public class UserController {
         return userService.getAllUsers(pageNo, pageSize, sortBy);
     }
 
+    @GetMapping("/by-id")
+    public UserGetDto findById(@RequestParam Long id) {
+        return userService.getUserById(id);
+    }
+
     @RequestMapping(params = "username", method = RequestMethod.GET)
     public UserGetDto findByUsername(@RequestParam("username") String username) {
         return userService.getUserByUsername(username);
