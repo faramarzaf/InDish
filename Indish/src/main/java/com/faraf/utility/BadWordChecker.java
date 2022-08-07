@@ -15,7 +15,8 @@ public class BadWordChecker {
         File file = ResourceUtils.getFile("classpath:badwords.json");
         ObjectMapper mapper = new ObjectMapper();
 
-        boolean isBadWord = mapper.readValue(file, new TypeReference<Map<String, List<Map<String, String>>>>() {})
+        boolean isBadWord = mapper.readValue(file, new TypeReference<Map<String, List<Map<String, String>>>>() {
+        })
                 .values()
                 .stream()
                 .flatMap(List::stream)
@@ -24,6 +25,8 @@ public class BadWordChecker {
         return isBadWord;
     }
 
+    public static void main(String[] args) {
+    }
 }
 
 
