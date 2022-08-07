@@ -1,7 +1,7 @@
 package com.faraf.mapper;
 
-import com.faraf.dto.UserGetDto;
-import com.faraf.dto.UserPostDto;
+import com.faraf.dto.response.UserGetDto;
+import com.faraf.dto.request.UserPostDto;
 import com.faraf.entity.User;
 import org.mapstruct.Mapper;
 

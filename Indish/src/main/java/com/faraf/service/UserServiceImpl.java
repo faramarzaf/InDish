@@ -1,8 +1,8 @@
 package com.faraf.service;
 
-import com.faraf.dto.UserGetDto;
-import com.faraf.dto.UserInfoUpdateRequestDto;
-import com.faraf.dto.UserPostDto;
+import com.faraf.dto.response.UserGetDto;
+import com.faraf.dto.request.UserInfoUpdateRequestDto;
+import com.faraf.dto.request.UserPostDto;
 import com.faraf.entity.User;
 import com.faraf.exception.DuplicatedRecordException;
 import com.faraf.exception.NotFoundException;

@@ -1,7 +1,7 @@
 package com.faraf.exception;
 
 
-import com.faraf.dto.ErrorResponse;
+import com.faraf.dto.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;

@@ -1,9 +1,9 @@
 package com.faraf.service;
 
 
-import com.faraf.dto.FoodPostRequestDto;
-import com.faraf.dto.FoodPostResponseDto;
-import com.faraf.dto.FoodPostUpdateRequestDto;
+import com.faraf.dto.request.FoodPostRequestDto;
+import com.faraf.dto.response.FoodPostResponseDto;
+import com.faraf.dto.request.FoodPostUpdateRequestDto;
 import com.faraf.entity.FoodPost;
 import com.faraf.exception.NotFoundException;
 import com.faraf.mapper.FoodMapper;

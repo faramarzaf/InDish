@@ -1,7 +1,7 @@
 package com.faraf.mapper;
 
-import com.faraf.dto.FoodPostRequestDto;
-import com.faraf.dto.FoodPostResponseDto;
+import com.faraf.dto.request.FoodPostRequestDto;
+import com.faraf.dto.response.FoodPostResponseDto;
 import com.faraf.entity.FoodPost;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

@@ -1,9 +1,9 @@
 package com.faraf.controller;
 
 
-import com.faraf.dto.FoodPostRequestDto;
-import com.faraf.dto.FoodPostResponseDto;
-import com.faraf.dto.FoodPostUpdateRequestDto;
+import com.faraf.dto.request.FoodPostRequestDto;
+import com.faraf.dto.response.FoodPostResponseDto;
+import com.faraf.dto.request.FoodPostUpdateRequestDto;
 import com.faraf.service.FoodPostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

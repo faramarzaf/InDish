@@ -1,4 +1,4 @@
-package com.faraf.dto;
+package com.faraf.dto.response;
 
 
 import java.time.LocalDateTime;
