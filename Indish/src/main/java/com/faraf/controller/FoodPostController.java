@@ -20,8 +20,8 @@ public class FoodPostController {
     private final FoodPostService foodPostService;
 
     @GetMapping("/by-id")
-    public FoodPostResponseDto findById(@RequestParam Long id){
-       return foodPostService.findById(id);
+    public FoodPostResponseDto findById(@RequestParam Long id) {
+        return foodPostService.findById(id);
     }
 
     @GetMapping("by-username")
@@ -60,8 +60,8 @@ public class FoodPostController {
 
 
     @PostMapping("/save")
-    public void postFood(@RequestBody FoodPostRequestDto requestDto) {
-        foodPostService.addFoodToUser(requestDto);
+    public FoodPostResponseDto postFood(@RequestBody FoodPostRequestDto requestDto) {
+        return foodPostService.addFoodToUser(requestDto);
     }
 
     @PutMapping("/update")

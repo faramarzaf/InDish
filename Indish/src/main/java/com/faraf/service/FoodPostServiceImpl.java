@@ -36,9 +36,10 @@ public class FoodPostServiceImpl implements FoodPostService {
 
     @Override
     @Transactional
-    public void addFoodToUser(FoodPostRequestDto requestDto) {
+    public FoodPostResponseDto addFoodToUser(FoodPostRequestDto requestDto) {
         FoodPost foodPost = foodMapper.toEntity(requestDto);
         foodPostRepository.save(foodPost);
+        return foodMapper.toFoodPostResponseDto(foodPost);
     }
 
     @Override

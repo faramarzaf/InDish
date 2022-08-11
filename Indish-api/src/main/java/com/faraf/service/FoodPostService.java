@@ -10,7 +10,7 @@ public interface FoodPostService {
 
     FoodPostResponseDto findById(long id);
 
-    void addFoodToUser(FoodPostRequestDto requestDto);
+    FoodPostResponseDto addFoodToUser(FoodPostRequestDto requestDto);
 
     List<FoodPostResponseDto> findAllByUsername(String username);
 

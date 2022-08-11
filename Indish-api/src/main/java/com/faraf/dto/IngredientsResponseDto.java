@@ -1,13 +1,13 @@
 package com.faraf.dto;
 
-public class IngredientsRequestDto {
+public class IngredientsResponseDto {
 
     private String content;
 
-    public IngredientsRequestDto() {
+    public IngredientsResponseDto() {
     }
 
-    public IngredientsRequestDto(String content) {
+    public IngredientsResponseDto(String content) {
         this.content = content;
     }
 

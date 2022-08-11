@@ -1,9 +1,7 @@
 package com.faraf.entity;
 
-public class Ingredients {
+public class Comment {
 
     private Long id;
-    private Long foodId;
     private String content;
-
 }
