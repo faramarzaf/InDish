@@ -4,6 +4,7 @@ import com.faraf.dto.response.UserGetDto;
 import com.faraf.dto.request.UserPostDto;
 import com.faraf.entity.User;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ public interface UserMapper {
 
     User toEntity(UserPostDto userPostDto);
 
+    @Mapping(target = "roles", source = "user.roles")
     UserGetDto toUserGet(User user);
 
     User toEntity(UserGetDto userGetDto);

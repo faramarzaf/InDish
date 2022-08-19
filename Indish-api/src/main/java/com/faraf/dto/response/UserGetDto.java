@@ -1,7 +1,10 @@
 package com.faraf.dto.response;
 
 
+import com.faraf.dto.RoleDto;
+
 import java.time.LocalDateTime;
+import java.util.Set;
 
 
 public class UserGetDto {
@@ -14,13 +17,14 @@ public class UserGetDto {
     private String password;
     private String bio;
     private String avatar;
+    private Set<RoleDto> roles;
     private LocalDateTime create_date;
     private LocalDateTime modified_date;
 
     public UserGetDto() {
     }
 
-    public UserGetDto(Long id, String userName, String email, String country, String city, String password, String bio, String avatar, LocalDateTime create_date, LocalDateTime modified_date) {
+    public UserGetDto(Long id, String userName, String email, String country, String city, String password, String bio, String avatar, Set<RoleDto> roles, LocalDateTime create_date, LocalDateTime modified_date) {
         this.id = id;
         this.userName = userName;
         this.email = email;
@@ -29,6 +33,7 @@ public class UserGetDto {
         this.password = password;
         this.bio = bio;
         this.avatar = avatar;
+        this.roles = roles;
         this.create_date = create_date;
         this.modified_date = modified_date;
     }
@@ -105,6 +110,14 @@ public class UserGetDto {
         this.bio = bio;
     }
 
+    public Set<RoleDto> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<RoleDto> roles) {
+        this.roles = roles;
+    }
+
     public LocalDateTime getCreate_date() {
         return create_date;
     }
@@ -124,6 +137,7 @@ public class UserGetDto {
                 ", password='" + password + '\'' +
                 ", bio='" + bio + '\'' +
                 ", avatar='" + avatar + '\'' +
+                ", roleDto=" + roles +
                 ", create_date=" + create_date +
                 ", modified_date=" + modified_date +
                 '}';

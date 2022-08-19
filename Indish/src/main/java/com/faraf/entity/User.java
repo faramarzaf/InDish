@@ -1,5 +1,6 @@
 package com.faraf.entity;
 
+import com.faraf.dto.RoleDto;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -8,6 +9,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Table(name = "t_user", uniqueConstraints = {
@@ -55,10 +57,16 @@ public class User {
     @Column(name = "modified_date")
     private LocalDateTime modified_date;
 
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "t_user_role",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    private Set<Role> roles;
+
     public User() {
     }
 
-    public User(Long id, String userName, String email, String password, String bio, String city, String country, String avatar, LocalDateTime create_date, LocalDateTime modified_date) {
+    public User(Long id, @NotEmpty(message = "{username.blank}") @Size(min = 3, max = 20, message = "{username.length}") String userName, @Email(message = "{email.valid}", regexp = "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$") @NotEmpty(message = "{email.blank}") String email, @NotEmpty(message = "{password.blank}") String password, String bio, String city, String country, String avatar, LocalDateTime create_date, LocalDateTime modified_date, Set<Role> roles) {
         this.id = id;
         this.userName = userName;
         this.email = email;
@@ -69,7 +77,7 @@ public class User {
         this.avatar = avatar;
         this.create_date = create_date;
         this.modified_date = modified_date;
-
+        this.roles = roles;
     }
 
     public Long getId() {
@@ -152,6 +160,15 @@ public class User {
         this.modified_date = modified_date;
     }
 
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -168,7 +185,9 @@ public class User {
         if (country != null ? !country.equals(user.country) : user.country != null) return false;
         if (avatar != null ? !avatar.equals(user.avatar) : user.avatar != null) return false;
         if (create_date != null ? !create_date.equals(user.create_date) : user.create_date != null) return false;
-        return modified_date != null ? modified_date.equals(user.modified_date) : user.modified_date == null;
+        if (modified_date != null ? !modified_date.equals(user.modified_date) : user.modified_date != null)
+            return false;
+        return roles != null ? roles.equals(user.roles) : user.roles == null;
     }
 
     @Override
@@ -183,6 +202,7 @@ public class User {
         result = 31 * result + (avatar != null ? avatar.hashCode() : 0);
         result = 31 * result + (create_date != null ? create_date.hashCode() : 0);
         result = 31 * result + (modified_date != null ? modified_date.hashCode() : 0);
+        result = 31 * result + (roles != null ? roles.hashCode() : 0);
         return result;
     }
 
@@ -199,6 +219,7 @@ public class User {
                 ", avatar='" + avatar + '\'' +
                 ", create_date=" + create_date +
                 ", modified_date=" + modified_date +
+                ", roles=" + roles +
                 '}';
     }
 }

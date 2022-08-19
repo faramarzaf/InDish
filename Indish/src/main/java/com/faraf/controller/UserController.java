@@ -1,9 +1,9 @@
 package com.faraf.controller;
 
 
-import com.faraf.dto.response.UserGetDto;
 import com.faraf.dto.request.UserInfoUpdateRequestDto;
 import com.faraf.dto.request.UserPostDto;
+import com.faraf.dto.response.UserGetDto;
 import com.faraf.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping
+    @GetMapping("/all")
     public List<UserGetDto> getAll(
             @RequestParam(defaultValue = "0") Integer pageNo,
             @RequestParam(defaultValue = "10") Integer pageSize,
@@ -43,9 +43,15 @@ public class UserController {
     }
 
 
-    @PostMapping("/save")
-    public ResponseEntity<UserGetDto> save(@Valid @RequestBody UserPostDto userPostDto) {
-        return ResponseEntity.ok(userService.save(userPostDto));
+    @PostMapping("/register")
+    public ResponseEntity<UserGetDto> register(@Valid @RequestBody UserPostDto userPostDto) {
+        return ResponseEntity.ok(userService.register(userPostDto));
+    }
+
+    @PostMapping("/login")
+    public void login(@Valid @RequestBody UserPostDto userPostDto) {
+        userService.loginUser(userPostDto);
+        ResponseEntity.ok();
     }
 
     @PutMapping("/update")

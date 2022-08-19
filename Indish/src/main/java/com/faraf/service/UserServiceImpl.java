@@ -1,23 +1,34 @@
 package com.faraf.service;
 
-import com.faraf.dto.response.UserGetDto;
+import com.faraf.RoleType;
 import com.faraf.dto.request.UserInfoUpdateRequestDto;
 import com.faraf.dto.request.UserPostDto;
+import com.faraf.dto.response.UserGetDto;
+import com.faraf.entity.Role;
 import com.faraf.entity.User;
 import com.faraf.exception.DuplicatedRecordException;
+import com.faraf.exception.InvalidRoleTypeException;
 import com.faraf.exception.NotFoundException;
+import com.faraf.mapper.RoleMapper;
 import com.faraf.mapper.UserMapper;
+import com.faraf.repository.RoleRepository;
 import com.faraf.repository.UserRepository;
 import com.faraf.utility.GeneralMessages;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -25,16 +36,30 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private final UserMapper userMapper;
+    private final RoleMapper roleMapper;
     private final PasswordEncoder passwordEncoder;
     private final GeneralMessages generalMessages;
+    private final AuthenticationManager authenticationManager;
+
+    @Override
+    public void loginUser(UserPostDto userPostDto) {
+        Authentication authentication = authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(userPostDto.getEmail(), userPostDto.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
 
     @Override
     @Transactional
-    public UserGetDto save(UserPostDto userPostDto) {
+    public UserGetDto register(UserPostDto userPostDto) {
         if (validateUser(userPostDto)) {
             User user = userMapper.toEntity(userPostDto);
             user.setPassword(passwordEncoder.encode(userPostDto.getPassword()));
+            Set<Role> roles = roleMapper.toEntity(userPostDto.getRoles());
+            user.setRoles(roles);
+            validateRoles(roles);
+            roleRepository.saveAll(user.getRoles());
             userRepository.save(user);
             return userMapper.toUserGet(user);
         } else return null;
@@ -61,7 +86,7 @@ public class UserServiceImpl implements UserService {
                 .map(user -> new UserGetDto(user.getId(), user.getUserName(),
                         user.getEmail(), user.getCountry(),
                         user.getCity(), user.getPassword(),
-                        user.getBio(), user.getAvatar(),
+                        user.getBio(), user.getAvatar(), roleMapper.toDto(user.getRoles()),
                         user.getCreate_date(), user.getModified_date()))
                 .collect(Collectors.toList())
         );
@@ -127,4 +152,15 @@ public class UserServiceImpl implements UserService {
             return !userRepository.existsUserByUserName(userPostDto.getUserName()) && !userRepository.existsUserByEmail(userPostDto.getEmail());
     }
 
+    private void validateRoles(Set<Role> roles) {
+        List<String> roleTypes =
+                Stream.of(RoleType.USER.getValue(), RoleType.ADMIN.getValue())
+                        .collect(Collectors.toList());
+        if (!roles
+                .stream()
+                .allMatch(role -> roleTypes.stream().anyMatch(roleType -> roleType.equals(role.getName())))) {
+
+            throw new InvalidRoleTypeException("Invalid role type detected!");
+        }
+    }
 }

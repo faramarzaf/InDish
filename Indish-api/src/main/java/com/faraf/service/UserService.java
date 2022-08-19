@@ -9,7 +9,9 @@ import java.util.List;
 
 public interface UserService {
 
-    UserGetDto save(UserPostDto user);
+    UserGetDto register(UserPostDto user);
+
+    void loginUser(UserPostDto userPostDto);
 
     void updateUserInfo(UserInfoUpdateRequestDto user, Long id);
 

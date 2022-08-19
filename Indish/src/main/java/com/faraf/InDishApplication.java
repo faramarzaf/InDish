@@ -16,12 +16,6 @@ public class InDishApplication {
         SpringApplication.run(InDishApplication.class, args);
     }
 
-
-    @Bean
-    public PasswordEncoder encoder() {
-        return new BCryptPasswordEncoder();
-    }
-
     /**
      * An application context delegates the message resolution to a bean with the exact name messageSource.
      * ReloadableResourceBundleMessageSource is the most common MessageSource implementation that
