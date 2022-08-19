@@ -1,4 +1,4 @@
-package com.faraf.service;
+package com.faraf.security;
 
 import com.faraf.dto.RoleDto;
 import com.faraf.entity.Role;
@@ -34,6 +34,11 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Set<Role> roles) {
+        //https://docs.spring.io/spring-security/reference/servlet/appendix/faq.html#appendix-faq-role-prefix
+        //by default spring add ROLE_ prefix. Since in this app we don't have ROLE_ prefix in request, the prefix added here to prevent 403 http error.
+        //  @PreAuthorize("hasAuthority('ADMIN')") VS @PreAuthorize("hasRole('ADMIN')")
+        // if use @PreAuthorize("hasAuthority('ADMIN')") --> return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+        // if use @PreAuthorize("hasRole('ADMIN')") -->  return roles.stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName())).collect(Collectors.toList());
         return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
     }
 

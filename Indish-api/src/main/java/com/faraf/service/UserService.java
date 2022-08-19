@@ -1,6 +1,7 @@
 package com.faraf.service;
 
 
+import com.faraf.dto.JWTAuthResponse;
 import com.faraf.dto.response.UserGetDto;
 import com.faraf.dto.request.UserInfoUpdateRequestDto;
 import com.faraf.dto.request.UserPostDto;
@@ -11,7 +12,7 @@ public interface UserService {
 
     UserGetDto register(UserPostDto user);
 
-    void loginUser(UserPostDto userPostDto);
+   JWTAuthResponse loginUser(UserPostDto userPostDto);
 
     void updateUserInfo(UserInfoUpdateRequestDto user, Long id);
 

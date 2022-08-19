@@ -28,6 +28,9 @@ spring:
   web:
     resources:
       add-mappings: false
+app:
+  jwt-secret: qFK7ecoef5w1n393ndjny507cop66kl
+  jwt-expiration-milliseconds: 10800000
 
   servlet:
     multipart:

@@ -1,6 +1,7 @@
 package com.faraf.service;
 
 import com.faraf.RoleType;
+import com.faraf.dto.JWTAuthResponse;
 import com.faraf.dto.request.UserInfoUpdateRequestDto;
 import com.faraf.dto.request.UserPostDto;
 import com.faraf.dto.response.UserGetDto;
@@ -13,6 +14,7 @@ import com.faraf.mapper.RoleMapper;
 import com.faraf.mapper.UserMapper;
 import com.faraf.repository.RoleRepository;
 import com.faraf.repository.UserRepository;
+import com.faraf.security.JwtTokenProvider;
 import com.faraf.utility.GeneralMessages;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
@@ -42,12 +44,18 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final GeneralMessages generalMessages;
     private final AuthenticationManager authenticationManager;
+    private final JwtTokenProvider tokenProvider;
 
     @Override
-    public void loginUser(UserPostDto userPostDto) {
+    public JWTAuthResponse loginUser(UserPostDto userPostDto) {
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(userPostDto.getEmail(), userPostDto.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        // get token form tokenProvider
+        JWTAuthResponse jwtAuthResponse = tokenProvider.generateToken(authentication);
+
+        return new JWTAuthResponse(jwtAuthResponse.getAccessToken(), jwtAuthResponse.getExpiresInMillis());
     }
 
     @Override
