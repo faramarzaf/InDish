@@ -1,6 +1,7 @@
 package com.faraf.security;
 
 import com.faraf.RoleType;
+import com.faraf.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -44,16 +45,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         String admin = RoleType.ADMIN.getValue();
 
         http
-                .csrf()
-                .disable()
-                .exceptionHandling()
-                .authenticationEntryPoint(authenticationEntryPoint)
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authorizeRequests()
+                .csrf().disable()
 
+                .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
+                .and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+
+                .and().authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/api/v1/user/login/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/user/register/**").permitAll()
 
@@ -70,8 +68,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/swagger-ui.html").permitAll()
                 .antMatchers("/webjars/**").permitAll()
 
-                .anyRequest()
-                .authenticated()
+                .anyRequest().authenticated()
         //  .and()
         //  .httpBasic()
         ;
@@ -88,7 +85,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService)
-                .passwordEncoder(passwordEncoder());
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 }

@@ -2,6 +2,7 @@ package com.faraf.service;
 
 import com.faraf.RoleType;
 import com.faraf.dto.JWTAuthResponse;
+import com.faraf.dto.LoginDto;
 import com.faraf.dto.request.UserInfoUpdateRequestDto;
 import com.faraf.dto.request.UserPostDto;
 import com.faraf.dto.response.UserGetDto;
@@ -47,9 +48,9 @@ public class UserServiceImpl implements UserService {
     private final JwtTokenProvider tokenProvider;
 
     @Override
-    public JWTAuthResponse loginUser(UserPostDto userPostDto) {
+    public JWTAuthResponse loginUser(LoginDto loginDto) {
         Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(userPostDto.getEmail(), userPostDto.getPassword()));
+                .authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         // get token form tokenProvider

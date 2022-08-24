@@ -2,6 +2,7 @@ package com.faraf.controller;
 
 
 import com.faraf.dto.JWTAuthResponse;
+import com.faraf.dto.LoginDto;
 import com.faraf.dto.request.UserInfoUpdateRequestDto;
 import com.faraf.dto.request.UserPostDto;
 import com.faraf.dto.response.UserGetDto;
@@ -49,8 +50,8 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public JWTAuthResponse login(@Valid @RequestBody UserPostDto userPostDto) {
-        return userService.loginUser(userPostDto);
+    public JWTAuthResponse login(@Valid @RequestBody LoginDto loginDto) {
+        return userService.loginUser(loginDto);
     }
 
     @PutMapping("/update")

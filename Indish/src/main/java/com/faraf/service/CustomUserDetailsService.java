@@ -1,6 +1,5 @@
-package com.faraf.security;
+package com.faraf.service;
 
-import com.faraf.dto.RoleDto;
 import com.faraf.entity.Role;
 import com.faraf.entity.User;
 import com.faraf.repository.UserRepository;
