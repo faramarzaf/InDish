@@ -1,10 +1,11 @@
 package com.faraf.security;
 
+import com.faraf.entity.User;
 import com.faraf.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -14,6 +15,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collection;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -31,8 +33,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             // get username from token
             String username = tokenProvider.getUsernameFromJWT(token);
             // load user associated with token
-            UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+            User user = customUserDetailsService.loadUserByEmail(username);
+            Collection<? extends GrantedAuthority> grantedAuthorities = customUserDetailsService.mapRolesToAuthorities(user.getRoles());
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user, null, grantedAuthorities);
             authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             // set spring security
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);

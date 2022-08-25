@@ -9,6 +9,7 @@ import com.faraf.dto.response.UserGetDto;
 import com.faraf.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -55,6 +56,7 @@ public class UserController {
     }
 
     @PutMapping("/update")
+    @PreAuthorize("#id == authentication.principal.id")
     public void update(@RequestBody UserInfoUpdateRequestDto user, @RequestParam("userId") Long id) {
         userService.updateUserInfo(user, id);
     }

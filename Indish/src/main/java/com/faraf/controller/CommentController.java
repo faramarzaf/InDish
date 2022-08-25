@@ -1,9 +1,11 @@
 package com.faraf.controller;
 
 import com.faraf.dto.request.CommentRequestDto;
+import com.faraf.dto.request.DeleteCommentRequestDto;
 import com.faraf.dto.response.CommentResponseDto;
 import com.faraf.service.CommentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,8 +41,9 @@ public class CommentController {
     }
 
     @DeleteMapping("/by-id")
-    public void deleteByCommentId(@RequestParam Long commentId) {
-        commentService.deleteByCommentId(commentId);
+    @PreAuthorize("#deleteCommentRequestDto.userId == authentication.principal.id")
+    public void deleteByCommentId(@RequestBody DeleteCommentRequestDto deleteCommentRequestDto) {
+        commentService.deleteByCommentId(deleteCommentRequestDto);
     }
 
 

@@ -2,9 +2,8 @@ package com.faraf.service;
 
 
 import com.faraf.dto.request.CommentRequestDto;
+import com.faraf.dto.request.DeleteCommentRequestDto;
 import com.faraf.dto.response.CommentResponseDto;
-import com.faraf.dto.response.FoodPostResponseDto;
-import com.faraf.dto.response.UserGetDto;
 import com.faraf.entity.Comment;
 import com.faraf.mapper.CommentMapper;
 import com.faraf.repository.CommentRepository;
@@ -63,7 +62,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public void deleteByCommentId(Long commentId) {
-        commentRepository.deleteById(commentId);
+    public void deleteByCommentId(DeleteCommentRequestDto deleteCommentRequestDto) {
+        commentRepository.deleteById(deleteCommentRequestDto.getCommentId());
     }
 }

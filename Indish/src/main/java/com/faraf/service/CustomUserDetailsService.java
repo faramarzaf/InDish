@@ -32,7 +32,13 @@ public class CustomUserDetailsService implements UserDetailsService {
                 mapRolesToAuthorities(user.getRoles()));
     }
 
-    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Set<Role> roles) {
+    public User loadUserByEmail(String email) {
+        return userRepository
+                .findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email:" + email));
+    }
+
+    public Collection<? extends GrantedAuthority> mapRolesToAuthorities(Set<Role> roles) {
         //https://docs.spring.io/spring-security/reference/servlet/appendix/faq.html#appendix-faq-role-prefix
         //by default spring add ROLE_ prefix. Since in this app we don't have ROLE_ prefix in request, the prefix added here to prevent 403 http error.
         //  @PreAuthorize("hasAuthority('ADMIN')") VS @PreAuthorize("hasRole('ADMIN')")

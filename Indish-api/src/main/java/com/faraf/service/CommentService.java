@@ -1,6 +1,7 @@
 package com.faraf.service;
 
 import com.faraf.dto.request.CommentRequestDto;
+import com.faraf.dto.request.DeleteCommentRequestDto;
 import com.faraf.dto.response.CommentResponseDto;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public interface CommentService {
 
     List<CommentResponseDto> findByUserId(Long userId);
 
-    void deleteByCommentId(Long commentId);
+    void deleteByCommentId(DeleteCommentRequestDto deleteCommentRequestDto);
 
 
 }

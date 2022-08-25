@@ -2,10 +2,11 @@ package com.faraf.controller;
 
 
 import com.faraf.dto.request.FoodPostRequestDto;
-import com.faraf.dto.response.FoodPostResponseDto;
 import com.faraf.dto.request.FoodPostUpdateRequestDto;
+import com.faraf.dto.response.FoodPostResponseDto;
 import com.faraf.service.FoodPostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -60,11 +61,13 @@ public class FoodPostController {
 
 
     @PostMapping("/save")
+    @PreAuthorize("#requestDto.userId == authentication.principal.id")
     public FoodPostResponseDto postFood(@RequestBody FoodPostRequestDto requestDto) {
         return foodPostService.addFoodToUser(requestDto);
     }
 
     @PutMapping("/update")
+    @PreAuthorize("#requestDto.userId == authentication.principal.id")
     public void updateFood(@RequestBody FoodPostUpdateRequestDto requestDto) {
         foodPostService.updateFoodPost(requestDto);
     }
