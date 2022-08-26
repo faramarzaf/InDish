@@ -43,7 +43,6 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final RoleMapper roleMapper;
     private final PasswordEncoder passwordEncoder;
-    private final GeneralMessages generalMessages;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider tokenProvider;
 
@@ -105,21 +104,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserGetDto getUserById(Long id) {
         Optional<User> userById = userRepository.findUserById(id);
-        User user = userById.orElseThrow(() -> new NotFoundException(generalMessages.getMsgUserNotFoundWithId() + id));
+        User user = userById.orElseThrow(() -> new NotFoundException("The user not found with id:" + id));
         return userMapper.toUserGet(user);
     }
 
     @Override
     public UserGetDto getUserByUsername(String username) {
         Optional<User> userByUserName = userRepository.findByUserName(username);
-        User user = userByUserName.orElseThrow(() -> new NotFoundException(generalMessages.getMsgUserNotFoundWithUsername() + username));
+        User user = userByUserName.orElseThrow(() -> new NotFoundException("The user not found with username:" + username));
         return userMapper.toUserGet(user);
     }
 
     @Override
     public UserGetDto getUserByEmail(String email) {
         Optional<User> userByEmail = userRepository.findByEmail(email);
-        User user = userByEmail.orElseThrow(() -> new NotFoundException(generalMessages.getMsgUserNotFoundWithEmail() + email));
+        User user = userByEmail.orElseThrow(() -> new NotFoundException("The user not found with email:" + email));
         return userMapper.toUserGet(user);
     }
 
@@ -141,7 +140,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public String deleteAllUsers() {
         userRepository.deleteAll();
-        return generalMessages.getMsgAllUsersDeleted();
+        return "All users deleted from database";
     }
 
     @Override
@@ -152,10 +151,10 @@ public class UserServiceImpl implements UserService {
 
     private boolean validateUser(UserPostDto userPostDto) {
         if (userRepository.existsUserByUserName(userPostDto.getUserName())) {
-            throw new DuplicatedRecordException(generalMessages.getMsgDuplicatedUsername());
+            throw new DuplicatedRecordException("Username has already taken, try with another one.");
 
         } else if (userRepository.existsUserByEmail(userPostDto.getEmail())) {
-            throw new DuplicatedRecordException(generalMessages.getMsgDuplicatedEmail());
+            throw new DuplicatedRecordException("Email has already taken, try with another one.");
 
         } else
             return !userRepository.existsUserByUserName(userPostDto.getUserName()) && !userRepository.existsUserByEmail(userPostDto.getEmail());

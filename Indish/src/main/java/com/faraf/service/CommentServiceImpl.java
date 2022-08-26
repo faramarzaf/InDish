@@ -22,17 +22,11 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;
-   /* private final UserService userService;
-    private final FoodPostService foodPostService;
-   */
+
 
     @Override
     @Transactional
     public CommentResponseDto addCommentToPost(CommentRequestDto commentRequestDto) {
-
-      /*  UserGetDto userById = userService.getUserById(commentRequestDto.getUserId());
-        FoodPostResponseDto foodPostServiceById = foodPostService.findById(commentRequestDto.getPostId());
-*/
         Comment comment = commentMapper.toEntity(commentRequestDto);
         commentRepository.save(comment);
         return commentMapper.toDto(comment);

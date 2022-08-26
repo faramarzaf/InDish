@@ -23,7 +23,6 @@ public class FoodPostServiceImpl implements FoodPostService {
 
     private final FoodPostRepository foodPostRepository;
     private final FoodMapper foodMapper;
-    private final GeneralMessages generalMessages;
 
     @Override
     public FoodPostResponseDto findById(long id) {
@@ -31,7 +30,7 @@ public class FoodPostServiceImpl implements FoodPostService {
         if (optFoodPost.isPresent()) {
             FoodPost foodPost = optFoodPost.get();
             return foodMapper.toFoodPostResponseDto(foodPost);
-        } else throw new NotFoundException(generalMessages.getMsgFoodNotFoundWithId() + id);
+        } else throw new NotFoundException("The food not found with id:" + id);
     }
 
     @Override
