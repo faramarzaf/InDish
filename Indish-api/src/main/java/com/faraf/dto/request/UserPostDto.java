@@ -2,26 +2,16 @@ package com.faraf.dto.request;
 
 
 import com.faraf.dto.RoleDto;
-import org.springframework.stereotype.Component;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
 import java.util.Set;
 
 
-@Component
 public class UserPostDto {
 
-    @NotEmpty(message = "{username.blank}")
-    @Size(min = 3, max = 20, message = "{username.length}")
     private String userName;
 
-    @Email(message = "{email.valid}", regexp = "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$")
-    @NotEmpty(message = "{email.blank}")
     private String email;
 
-    @NotEmpty(message = "{password.blank}")
     private String password;
 
     private String bio;
@@ -37,7 +27,7 @@ public class UserPostDto {
     public UserPostDto() {
     }
 
-    public UserPostDto(@NotEmpty(message = "{username.blank}") @Size(min = 3, max = 20, message = "{username.length}") String userName, @Email(message = "{email.valid}", regexp = "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$") @NotEmpty(message = "{email.blank}") String email, @NotEmpty(message = "{password.blank}") String password, String bio, String city, String country, String avatar, Set<RoleDto> roles) {
+    public UserPostDto(String userName, String email, String password, String bio, String city, String country, String avatar, Set<RoleDto> roles) {
         this.userName = userName;
         this.email = email;
         this.password = password;

@@ -9,6 +9,7 @@ import com.faraf.dto.response.UserGetDto;
 import com.faraf.entity.Role;
 import com.faraf.entity.User;
 import com.faraf.exception.DuplicatedRecordException;
+import com.faraf.exception.InternalServerException;
 import com.faraf.exception.InvalidRoleTypeException;
 import com.faraf.exception.NotFoundException;
 import com.faraf.mapper.RoleMapper;
@@ -16,7 +17,6 @@ import com.faraf.mapper.UserMapper;
 import com.faraf.repository.RoleRepository;
 import com.faraf.repository.UserRepository;
 import com.faraf.security.JwtTokenProvider;
-import com.faraf.utility.GeneralMessages;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,6 +26,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -150,13 +151,30 @@ public class UserServiceImpl implements UserService {
 
 
     private boolean validateUser(UserPostDto userPostDto) {
-        if (userRepository.existsUserByUserName(userPostDto.getUserName())) {
+        String emailRegex = "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$";
+
+        if (ObjectUtils.isEmpty(userPostDto.getUserName()))
+            throw new InternalServerException("The username can not be empty!");
+
+        else if (userPostDto.getUserName().length() < 3 || userPostDto.getUserName().length() > 20)
+            throw new InternalServerException("The username must be between 3 and 20 characters!");
+
+        else if (ObjectUtils.isEmpty(userPostDto.getEmail()))
+            throw new InternalServerException("The email can not be empty!");
+
+        else if (ObjectUtils.isEmpty(userPostDto.getPassword()))
+            throw new InternalServerException("The password can not be empty!");
+
+        else if (!userPostDto.getEmail().matches(emailRegex))
+            throw new InternalServerException("Provide valid email address!");
+
+        else if (userRepository.existsUserByUserName(userPostDto.getUserName()))
             throw new DuplicatedRecordException("Username has already taken, try with another one.");
 
-        } else if (userRepository.existsUserByEmail(userPostDto.getEmail())) {
+        else if (userRepository.existsUserByEmail(userPostDto.getEmail()))
             throw new DuplicatedRecordException("Email has already taken, try with another one.");
 
-        } else
+        else
             return !userRepository.existsUserByUserName(userPostDto.getUserName()) && !userRepository.existsUserByEmail(userPostDto.getEmail());
     }
 
