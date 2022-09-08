@@ -1,13 +1,13 @@
-package com.faraf.dto;
+package com.faraf.dto.request;
 
-public class IngredientsResponseDto {
+public class IngredientsRequestDto extends BaseRequestDto{
 
     private String content;
 
-    public IngredientsResponseDto() {
+    public IngredientsRequestDto() {
     }
 
-    public IngredientsResponseDto(String content) {
+    public IngredientsRequestDto(String content) {
         this.content = content;
     }
 

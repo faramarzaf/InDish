@@ -1,8 +1,8 @@
 package com.faraf.service;
 
 
-import com.faraf.dto.JWTAuthResponse;
-import com.faraf.dto.LoginDto;
+import com.faraf.dto.response.JWTAuthResponse;
+import com.faraf.dto.request.LoginDto;
 import com.faraf.dto.request.UserInfoUpdateRequestDto;
 import com.faraf.dto.request.UserPostDto;
 import com.faraf.dto.response.UserGetDto;
@@ -26,10 +26,6 @@ public interface UserService {
     UserGetDto getUserByEmail(String email);
 
     String deleteUserById(Long id);
-
-    String deleteUserByEmail(String email);
-
-    String deleteAllUsers();
 
     boolean existsUserByEmail(String email);
 

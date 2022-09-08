@@ -1,9 +1,11 @@
 package com.faraf.controller;
 
-import com.faraf.dto.IngredientsRequestDto;
-import com.faraf.dto.IngredientsResponseDto;
+import com.faraf.dto.request.DeleteIngredientRequestDto;
+import com.faraf.dto.request.IngredientsRequestDto;
+import com.faraf.dto.response.IngredientResponseDto;
 import com.faraf.service.IngredientService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,18 +18,28 @@ public class IngredientController {
     private final IngredientService ingredientService;
 
     @PostMapping("/save")
-    public void save(@RequestBody IngredientsRequestDto requestDto, @RequestParam Long foodId) {
-        ingredientService.addIngredientToFood(requestDto, foodId);
+    @PreAuthorize("#requestDto.userId == authentication.principal.id")
+    public IngredientResponseDto save(@RequestBody IngredientsRequestDto requestDto, @RequestParam Long foodId) {
+       return ingredientService.addIngredientToFood(requestDto, foodId);
     }
 
     @GetMapping("/by-food-name")
-    public List<IngredientsResponseDto> getIngredientsByFoodName(@RequestParam String foodName) {
+    public List<IngredientResponseDto> getIngredientsByFoodName(@RequestParam String foodName) {
         return ingredientService.getIngredientsByFoodName(foodName);
     }
 
 
     @GetMapping("/by-food-id")
-    public List<IngredientsResponseDto> getIngredientsByFoodName(@RequestParam Long foodId) {
+    public List<IngredientResponseDto> getIngredientsByFoodId(@RequestParam Long foodId) {
         return ingredientService.getIngredientsByFoodId(foodId);
     }
+
+
+    @DeleteMapping("/by-ingredient-id")
+    @PreAuthorize("#requestDto.userId == authentication.principal.id")
+    public void deleteByIngredientId(DeleteIngredientRequestDto requestDto){
+        ingredientService.deleteByIngredientId(requestDto);
+    }
+
+
 }

@@ -9,6 +9,8 @@ import java.util.List;
 @Repository
 public interface FoodPostRepository extends PagingAndSortingRepository<FoodPost, Long> {
 
+    List<FoodPost> findAllByUser_Id(Long userId);
+
     List<FoodPost> findByUser_UserName(String username);
 
     List<FoodPost> findAllByOriginCountry(String country);

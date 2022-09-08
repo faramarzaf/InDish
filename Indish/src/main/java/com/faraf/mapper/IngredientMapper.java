@@ -1,10 +1,9 @@
 package com.faraf.mapper;
 
-import com.faraf.dto.IngredientsRequestDto;
-import com.faraf.dto.IngredientsResponseDto;
+import com.faraf.dto.request.IngredientsRequestDto;
+import com.faraf.dto.response.IngredientResponseDto;
 import com.faraf.entity.Ingredient;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 import java.util.List;
 
@@ -15,8 +14,8 @@ public interface IngredientMapper {
     //  @Mapping(source = "content", target = "ingredientsRequestDto.content")
     Ingredient toEntity(IngredientsRequestDto ingredientsRequestDto);
 
-    IngredientsResponseDto toIngredientsResponseDto(Ingredient ingredient);
+    IngredientResponseDto toIngredientsResponseDto(Ingredient ingredient);
 
-    List<IngredientsResponseDto> toIngredientsResponseDto(List<Ingredient> ingredients);
+    List<IngredientResponseDto> toIngredientsResponseDto(List<Ingredient> ingredients);
 
 }

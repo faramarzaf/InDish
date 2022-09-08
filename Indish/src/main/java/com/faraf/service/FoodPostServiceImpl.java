@@ -1,9 +1,10 @@
 package com.faraf.service;
 
 
-import com.faraf.dto.request.FoodPostRequestDto;
+import com.faraf.dto.request.*;
+import com.faraf.dto.response.CommentResponseDto;
 import com.faraf.dto.response.FoodPostResponseDto;
-import com.faraf.dto.request.FoodPostUpdateRequestDto;
+import com.faraf.dto.response.IngredientResponseDto;
 import com.faraf.entity.FoodPost;
 import com.faraf.exception.NotFoundException;
 import com.faraf.mapper.FoodMapper;
@@ -23,6 +24,8 @@ public class FoodPostServiceImpl implements FoodPostService {
 
     private final FoodPostRepository foodPostRepository;
     private final FoodMapper foodMapper;
+    private final IngredientService ingredientService;
+    private final CommentService commentService;
 
     @Override
     public FoodPostResponseDto findById(long id) {
@@ -45,6 +48,12 @@ public class FoodPostServiceImpl implements FoodPostService {
     public List<FoodPostResponseDto> findAllByUsername(String username) {
         List<FoodPost> allByUser_userName = foodPostRepository.findByUser_UserName(username);
         return foodMapper.toFoodPostResponseDto(allByUser_userName);
+    }
+
+    @Override
+    public List<FoodPostResponseDto> findAllByUserId(Long userId) {
+        List<FoodPost> allByUser_id = foodPostRepository.findAllByUser_Id(userId);
+        return foodMapper.toFoodPostResponseDto(allByUser_id);
     }
 
     @Override
@@ -88,4 +97,31 @@ public class FoodPostServiceImpl implements FoodPostService {
         foodPostById.setVeganFood(requestDto.isVeganFood());
         foodPostRepository.save(foodPostById);
     }
+
+    @Override
+    @Transactional
+    public void deletePostByFoodId(DeleteFoodPostRequestDto requestDto) {
+        removeFoodChildes(requestDto);
+        foodPostRepository.deleteById(requestDto.getFoodPostId());
+    }
+
+    private void removeFoodChildes(DeleteFoodPostRequestDto requestDto) {
+        List<IngredientResponseDto> allIngredientsByFoodId = ingredientService.getIngredientsByFoodId(requestDto.getFoodPostId());
+        List<CommentResponseDto> allCommentsByFoodId = commentService.findByFoodPostId(requestDto.getFoodPostId());
+
+        for (IngredientResponseDto ingredientResponseDto : allIngredientsByFoodId) {
+            DeleteIngredientRequestDto deleteIngredientRequestDto = new DeleteIngredientRequestDto();
+            deleteIngredientRequestDto.setUserId(requestDto.getUserId());
+            deleteIngredientRequestDto.setIngredientId(ingredientResponseDto.getId());
+            ingredientService.deleteByIngredientId(deleteIngredientRequestDto);
+        }
+
+        for (CommentResponseDto commentResponseDto : allCommentsByFoodId) {
+            DeleteCommentRequestDto deleteCommentRequestDto = new DeleteCommentRequestDto();
+            deleteCommentRequestDto.setUserId(requestDto.getUserId());
+            deleteCommentRequestDto.setCommentId(commentResponseDto.getCommentId());
+            commentService.deleteByCommentId(deleteCommentRequestDto);
+        }
+    }
+
 }

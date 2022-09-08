@@ -1,10 +1,14 @@
 package com.faraf.controller;
 
 
+import com.faraf.dto.request.DeleteFoodPostRequestDto;
+import com.faraf.dto.request.DeleteIngredientRequestDto;
 import com.faraf.dto.request.FoodPostRequestDto;
 import com.faraf.dto.request.FoodPostUpdateRequestDto;
 import com.faraf.dto.response.FoodPostResponseDto;
+import com.faraf.dto.response.IngredientResponseDto;
 import com.faraf.service.FoodPostService;
+import com.faraf.service.IngredientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +27,11 @@ public class FoodPostController {
     @GetMapping("/by-id")
     public FoodPostResponseDto findById(@RequestParam Long id) {
         return foodPostService.findById(id);
+    }
+
+    @GetMapping("by-user-id")
+    public List<FoodPostResponseDto> findAllByUsername(@RequestParam Long userId) {
+        return foodPostService.findAllByUserId(userId);
     }
 
     @GetMapping("by-username")
@@ -71,4 +80,11 @@ public class FoodPostController {
     public void updateFood(@RequestBody FoodPostUpdateRequestDto requestDto) {
         foodPostService.updateFoodPost(requestDto);
     }
+
+    @DeleteMapping("/delete-by-food-id")
+    @PreAuthorize("#requestDto.userId == authentication.principal.id")
+    public void deleteFood(@RequestBody DeleteFoodPostRequestDto requestDto) {
+        foodPostService.deletePostByFoodId(requestDto);
+    }
+
 }

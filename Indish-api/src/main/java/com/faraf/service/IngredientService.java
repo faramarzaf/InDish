@@ -1,15 +1,18 @@
 package com.faraf.service;
 
-import com.faraf.dto.IngredientsRequestDto;
-import com.faraf.dto.IngredientsResponseDto;
+import com.faraf.dto.request.DeleteIngredientRequestDto;
+import com.faraf.dto.request.IngredientsRequestDto;
+import com.faraf.dto.response.IngredientResponseDto;
 
 import java.util.List;
 
 public interface IngredientService {
-    void addIngredientToFood(IngredientsRequestDto ingredientsRequestDto, Long foodId);
+    IngredientResponseDto addIngredientToFood(IngredientsRequestDto ingredientsRequestDto, Long foodId);
 
-    List<IngredientsResponseDto> getIngredientsByFoodName(String foodName);
+    List<IngredientResponseDto> getIngredientsByFoodName(String foodName);
 
-    List<IngredientsResponseDto> getIngredientsByFoodId(Long foodId);
+    List<IngredientResponseDto> getIngredientsByFoodId(Long foodId);
+
+    void deleteByIngredientId(DeleteIngredientRequestDto requestDto);
 
 }

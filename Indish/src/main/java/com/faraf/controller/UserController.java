@@ -1,8 +1,8 @@
 package com.faraf.controller;
 
 
-import com.faraf.dto.JWTAuthResponse;
-import com.faraf.dto.LoginDto;
+import com.faraf.dto.response.JWTAuthResponse;
+import com.faraf.dto.request.LoginDto;
 import com.faraf.dto.request.UserInfoUpdateRequestDto;
 import com.faraf.dto.request.UserPostDto;
 import com.faraf.dto.response.UserGetDto;
@@ -61,19 +61,9 @@ public class UserController {
         userService.updateUserInfo(user, id);
     }
 
-    @DeleteMapping("/deleteAll")
-    public String deleteAll() {
-        return userService.deleteAllUsers();
-    }
-
-    @DeleteMapping("/deleteId")
+    @DeleteMapping("/delete-by-id")
     public String deleteById(@RequestParam("id") Long id) {
         return userService.deleteUserById(id);
-    }
-
-    @DeleteMapping("/deleteEmail")
-    public String deleteByEmail(@RequestParam("email") String email) {
-        return userService.deleteUserByEmail(email);
     }
 
 }

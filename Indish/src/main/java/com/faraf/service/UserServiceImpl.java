@@ -1,10 +1,10 @@
 package com.faraf.service;
 
 import com.faraf.RoleType;
-import com.faraf.dto.JWTAuthResponse;
-import com.faraf.dto.LoginDto;
-import com.faraf.dto.request.UserInfoUpdateRequestDto;
-import com.faraf.dto.request.UserPostDto;
+import com.faraf.dto.request.*;
+import com.faraf.dto.response.CommentResponseDto;
+import com.faraf.dto.response.FoodPostResponseDto;
+import com.faraf.dto.response.JWTAuthResponse;
 import com.faraf.dto.response.UserGetDto;
 import com.faraf.entity.Role;
 import com.faraf.entity.User;
@@ -41,6 +41,8 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final FoodPostService foodPostService;
+    private final CommentService commentService;
     private final UserMapper userMapper;
     private final RoleMapper roleMapper;
     private final PasswordEncoder passwordEncoder;
@@ -124,24 +126,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public String deleteUserById(Long id) {
+        removeUserChildes(id);
         userRepository.deleteUserById(id);
         return "User with id: " + id + " deleted successfully!";
-    }
-
-
-    @Override
-    @Transactional
-    public String deleteUserByEmail(String email) {
-        userRepository.deleteUserByEmail(email);
-        return "User with email: " + email + " deleted successfully!";
-    }
-
-    @Override
-    @Transactional
-    public String deleteAllUsers() {
-        userRepository.deleteAll();
-        return "All users deleted from database";
     }
 
     @Override
@@ -187,6 +176,25 @@ public class UserServiceImpl implements UserService {
                 .allMatch(role -> roleTypes.stream().anyMatch(roleType -> roleType.equals(role.getName())))) {
 
             throw new InvalidRoleTypeException("Invalid role type detected!");
+        }
+    }
+
+    private void removeUserChildes(Long userId) {
+        List<CommentResponseDto> allCommentsByUserId = commentService.findByUserId(userId);
+        List<FoodPostResponseDto> allFoodsByUserId = foodPostService.findAllByUserId(userId);
+
+        for (CommentResponseDto commentResponseDto : allCommentsByUserId) {
+            DeleteCommentRequestDto deleteCommentRequestDto = new DeleteCommentRequestDto();
+            deleteCommentRequestDto.setCommentId(commentResponseDto.getCommentId());
+            deleteCommentRequestDto.setUserId(userId);
+            commentService.deleteByCommentId(deleteCommentRequestDto);
+        }
+
+        for (FoodPostResponseDto foodPostResponseDto : allFoodsByUserId) {
+            DeleteFoodPostRequestDto deleteFoodPostRequestDto = new DeleteFoodPostRequestDto();
+            deleteFoodPostRequestDto.setUserId(userId);
+            deleteFoodPostRequestDto.setFoodPostId(foodPostResponseDto.getId());
+            foodPostService.deletePostByFoodId(deleteFoodPostRequestDto);
         }
     }
 }

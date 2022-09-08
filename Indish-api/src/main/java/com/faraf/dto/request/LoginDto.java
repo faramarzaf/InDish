@@ -1,4 +1,4 @@
-package com.faraf.dto;
+package com.faraf.dto.request;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;

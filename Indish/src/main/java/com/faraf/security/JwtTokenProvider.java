@@ -1,6 +1,6 @@
 package com.faraf.security;
 
-import com.faraf.dto.JWTAuthResponse;
+import com.faraf.dto.response.JWTAuthResponse;
 import com.faraf.exception.ValidationException;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;

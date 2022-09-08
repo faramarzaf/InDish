@@ -1,5 +1,6 @@
 package com.faraf.service;
 
+import com.faraf.dto.request.DeleteFoodPostRequestDto;
 import com.faraf.dto.request.FoodPostRequestDto;
 import com.faraf.dto.response.FoodPostResponseDto;
 import com.faraf.dto.request.FoodPostUpdateRequestDto;
@@ -14,6 +15,8 @@ public interface FoodPostService {
 
     List<FoodPostResponseDto> findAllByUsername(String username);
 
+    List<FoodPostResponseDto> findAllByUserId(Long userId);
+
     List<FoodPostResponseDto> findAllByOriginCountry(String country);
 
     List<FoodPostResponseDto> findAllByVeganFoodTrue();
@@ -25,5 +28,7 @@ public interface FoodPostService {
     List<FoodPostResponseDto> findAllByTimeRequiredBetween(int startHour, int endHour);
 
     void updateFoodPost(FoodPostUpdateRequestDto requestDto);
+
+    void deletePostByFoodId(DeleteFoodPostRequestDto requestDto);
 
 }
