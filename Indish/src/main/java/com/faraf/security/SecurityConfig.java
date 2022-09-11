@@ -16,6 +16,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -67,14 +68,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/swagger-ui.html").permitAll()
                 .antMatchers("/v3/api-docs").permitAll()
                 .antMatchers("/webjars/**").permitAll()
+                .antMatchers("/register/**").permitAll()
+                .antMatchers("/users").permitAll() // maybe better to role admin
 
                 .anyRequest().authenticated()
                 .and()
 
-                .formLogin().loginPage("/login").usernameParameter("email").permitAll()
-                .defaultSuccessUrl("/home").permitAll()
+                .formLogin().loginPage("/login").defaultSuccessUrl("/users").permitAll()
                 .and()
-                .logout().permitAll()
+                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll()
                 .and()
                 .logout().permitAll()
 

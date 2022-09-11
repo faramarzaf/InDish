@@ -3,15 +3,21 @@ package com.faraf.dto.request;
 
 import com.faraf.dto.RoleDto;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import java.util.Set;
 
 
 public class UserPostDto {
 
+    @NotEmpty(message = "The username can not be empty!")
     private String userName;
 
+    @Email(message = "Provide valid email address!", regexp = "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$")
+    @NotEmpty(message = "The email can not be empty!")
     private String email;
 
+    @NotEmpty(message = "The password can not be empty!")
     private String password;
 
     private String bio;
