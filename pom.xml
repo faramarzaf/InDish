@@ -12,7 +12,7 @@
 
     <groupId>com.faraf</groupId>
     <artifactId>InDish</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0-RELEASE</version>
     <name>InDish</name>
     <description>Backend of InDish</description>
     <packaging>pom</packaging>
