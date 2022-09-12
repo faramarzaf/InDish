@@ -29,6 +29,12 @@ public class WebController {
         return "login";
     }
 
+
+    @RequestMapping("/home")
+    public String showHomePage() {
+        return "home";
+    }
+
     // handler method to handle user registration form request
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
@@ -66,13 +72,5 @@ public class WebController {
         model.addAttribute("users", allUsers);
         return "users";
     }
-
-    // Login form with error
-    @RequestMapping("/login-error")
-    public String loginError(Model model) {
-        model.addAttribute("loginError", true);
-        return "login";
-    }
-
 
 }

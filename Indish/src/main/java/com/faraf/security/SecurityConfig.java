@@ -69,6 +69,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/v3/api-docs").permitAll()
                 .antMatchers("/webjars/**").permitAll()
                 .antMatchers("/register/**").permitAll()
+                .antMatchers("/home/**").permitAll()
                 .antMatchers("/users").permitAll() // maybe better to role admin
 
                 .anyRequest().authenticated()
