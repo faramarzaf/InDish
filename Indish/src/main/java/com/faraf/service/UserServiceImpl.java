@@ -105,6 +105,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Page<UserGetDto> getAllUsers(int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+
+        List<UserGetDto> userGetDtoList = userRepository.findAll(pageable)
+                .stream()
+                .map(userMapper::toUserGet)
+                .collect(Collectors.toList());
+        return new PageImpl<>(userGetDtoList);
+    }
+
+    @Override
     public UserGetDto getUserById(Long id) {
         Optional<User> userById = userRepository.findUserById(id);
         User user = userById.orElseThrow(() -> new NotFoundException("The user not found with id:" + id));

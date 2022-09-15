@@ -65,7 +65,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.DELETE, "/api/v1/user/deleteId/**").hasAuthority(admin)
                 .antMatchers(HttpMethod.DELETE, "/api/v1/user/deleteEmail/**").hasAuthority(admin)
 
-                .antMatchers("/users").hasAuthority(admin) // maybe better to role admin
+                .antMatchers("/users/**").hasAuthority(admin) // maybe better to role admin
                 .antMatchers("/swagger-ui/**").permitAll()
                 .antMatchers("/swagger-resources/**").permitAll()
                 .antMatchers("/swagger-ui.html").permitAll()
@@ -81,7 +81,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
 
                 .logout().invalidateHttpSession(true).clearAuthentication(true).logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll()
-             
+
         ;
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
