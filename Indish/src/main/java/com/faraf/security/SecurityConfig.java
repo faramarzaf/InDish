@@ -12,7 +12,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -45,14 +44,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         String user = RoleType.USER.getValue();
         String admin = RoleType.ADMIN.getValue();
 
+
         http
                 .csrf().disable()
 
                 .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
                 .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                // .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
-                .and().authorizeRequests()
+/*                .sessionManagement().invalidSessionUrl("")
+                .and()*/
+
+                .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/api/v1/user/login/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/user/register/**").permitAll()
 
@@ -63,27 +66,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.DELETE, "/api/v1/user/deleteId/**").hasAuthority(admin)
                 .antMatchers(HttpMethod.DELETE, "/api/v1/user/deleteEmail/**").hasAuthority(admin)
 
+                .antMatchers("/users").hasAuthority(admin) // maybe better to role admin
                 .antMatchers("/swagger-ui/**").permitAll()
                 .antMatchers("/swagger-resources/**").permitAll()
                 .antMatchers("/swagger-ui.html").permitAll()
                 .antMatchers("/v3/api-docs").permitAll()
                 .antMatchers("/webjars/**").permitAll()
                 .antMatchers("/register/**").permitAll()
-                .antMatchers("/", "/home").permitAll()
-
-                .antMatchers("/users").hasAuthority(admin) // maybe better to role admin
+                .antMatchers("/").permitAll()
 
                 .anyRequest().authenticated()
                 .and()
-                .formLogin().loginPage("/login").successForwardUrl("/home").permitAll()
+                .formLogin().loginPage("/login").defaultSuccessUrl("/").permitAll()
                 .and()
-                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll()
+                .logout().invalidateHttpSession(true).clearAuthentication(true).logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll()
                 .and()
                 .logout().permitAll()
-
-
-        //  .and()
-        //  .httpBasic()
         ;
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }

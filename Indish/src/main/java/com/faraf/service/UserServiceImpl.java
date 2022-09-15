@@ -138,6 +138,11 @@ public class UserServiceImpl implements UserService {
         return userRepository.existsUserByEmail(email);
     }
 
+    @Override
+    public boolean existsUserByUsername(String username) {
+        return userRepository.existsUserByUserName(username);
+    }
+
 
     private boolean validateUser(UserPostDto userPostDto) {
         String emailRegex = "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$";
