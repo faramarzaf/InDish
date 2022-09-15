@@ -50,10 +50,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
                 .and()
-                // .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
-/*                .sessionManagement().invalidSessionUrl("")
-                .and()*/
+                .sessionManagement().invalidSessionUrl("/")
+                .and()
 
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/api/v1/user/login/**").permitAll()
@@ -77,11 +76,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .anyRequest().authenticated()
                 .and()
+
                 .formLogin().loginPage("/login").defaultSuccessUrl("/").permitAll()
                 .and()
+
                 .logout().invalidateHttpSession(true).clearAuthentication(true).logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll()
-                .and()
-                .logout().permitAll()
+             
         ;
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }

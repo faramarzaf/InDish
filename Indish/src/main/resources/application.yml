@@ -1,4 +1,7 @@
 server:
+  servlet:
+    session:
+      timeout: 60m
   error:
     include-binding-errors: always
     include-message: always
