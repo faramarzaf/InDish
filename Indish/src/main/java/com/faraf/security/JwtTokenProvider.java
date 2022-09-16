@@ -42,7 +42,6 @@ public class JwtTokenProvider {
     }
 
     // validate JWT token
-    //todo why when AuthException throws return code is 500?
     public boolean validateToken(String token) throws AuthException {
 
         try {
