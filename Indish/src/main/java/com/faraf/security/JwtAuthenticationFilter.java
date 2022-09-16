@@ -1,6 +1,7 @@
 package com.faraf.security;
 
 import com.faraf.entity.User;
+import com.faraf.exception.AuthException;
 import com.faraf.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,6 +16,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -28,19 +30,35 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = getJWTFromRequest(request);
-
-        if (StringUtils.hasText(token) && tokenProvider.validateToken(token)) {
-            // get username from token
-            String username = tokenProvider.getUsernameFromJWT(token);
-            // load user associated with token
-            User user = customUserDetailsService.loadUserByEmail(username);
-            Collection<? extends GrantedAuthority> grantedAuthorities = customUserDetailsService.mapRolesToAuthorities(user.getRoles());
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user, null, grantedAuthorities);
-            authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            // set spring security
-            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+        try {
+            if (StringUtils.hasText(token) && tokenProvider.validateToken(token)) {
+                // get username from token
+                String username = tokenProvider.getUsernameFromJWT(token);
+                // load user associated with token
+                User user = customUserDetailsService.loadUserByEmail(username);
+                Collection<? extends GrantedAuthority> grantedAuthorities = customUserDetailsService.mapRolesToAuthorities(user.getRoles());
+                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user, null, grantedAuthorities);
+                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                // set spring security
+                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            }
+            filterChain.doFilter(request, response);
+        } catch (AuthException e) {
+            String message = e.getMessage();
+            LocalDateTime now = LocalDateTime.now();
+            response.setContentType("application/json");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            String sb = "{ " +
+                    "\"timestamp\": \"" + now + "\"," +
+                    "\"status\": \"401\"," +
+                    "\"error\": \"Unauthorized\"," +
+                    "\"message\": \"" + message + "\"," +
+                    "\"path\": \"" +
+                    request.getRequestURI() +
+                    "\"" +
+                    "} ";
+            response.getWriter().write(sb);
         }
-        filterChain.doFilter(request, response);
     }
 
     private String getJWTFromRequest(HttpServletRequest request) {

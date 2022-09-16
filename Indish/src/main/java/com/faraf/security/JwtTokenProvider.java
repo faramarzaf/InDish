@@ -1,14 +1,12 @@
 package com.faraf.security;
 
 import com.faraf.dto.response.JWTAuthResponse;
-import com.faraf.exception.ValidationException;
+import com.faraf.exception.AuthException;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Component
@@ -44,20 +42,20 @@ public class JwtTokenProvider {
     }
 
     // validate JWT token
-    public boolean validateToken(String token) {
-        LocalDateTime now = LocalDateTime.now();
+    //todo why when AuthException throws return code is 500?
+    public boolean validateToken(String token) throws AuthException {
 
         try {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
             return true;
         } catch (MalformedJwtException ex) {
-            throw new ValidationException("Invalid JWT token", HttpStatus.BAD_REQUEST, now);
+            throw new AuthException("Invalid JWT token");
         } catch (ExpiredJwtException ex) {
-            throw new ValidationException("Expired JWT token", HttpStatus.BAD_REQUEST, now);
+            throw new AuthException("Expired JWT token");
         } catch (UnsupportedJwtException ex) {
-            throw new ValidationException("Unsupported JWT token", HttpStatus.BAD_REQUEST, now);
+            throw new AuthException("Unsupported JWT token");
         } catch (IllegalArgumentException ex) {
-            throw new ValidationException("JWT claims string is empty.", HttpStatus.BAD_REQUEST, now);
+            throw new AuthException("JWT claims string is empty.");
         }
     }
 }
