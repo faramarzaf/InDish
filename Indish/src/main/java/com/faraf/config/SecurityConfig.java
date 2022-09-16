@@ -1,6 +1,8 @@
-package com.faraf.security;
+package com.faraf.config;
 
 import com.faraf.RoleType;
+import com.faraf.security.JwtAuthenticationEntryPoint;
+import com.faraf.security.JwtAuthenticationFilter;
 import com.faraf.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

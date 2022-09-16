@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 public class MyErrorController implements ErrorController {
 
 
+    // html response returns in api when call is ok or nok
+
     @RequestMapping("/error")
     public String handleError(HttpServletRequest request) {
         Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
