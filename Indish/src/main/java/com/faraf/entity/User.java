@@ -1,14 +1,19 @@
 package com.faraf.entity;
 
-import com.faraf.dto.RoleDto;
+import lombok.Builder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Set;
 
 @Entity
@@ -16,7 +21,7 @@ import java.util.Set;
         @UniqueConstraint(columnNames = {"username"}, name = "uk_username"),
         @UniqueConstraint(columnNames = {"email"}, name = "uk_email")
 })
-public class User {
+public class User implements UserDetails {
 
     @Id
     @Column(name = "id")
@@ -35,7 +40,7 @@ public class User {
 
     @Column(name = "password")
     @NotEmpty(message = "{password.blank}")
-    private String password;
+    private String userPassword;
 
     @Column(name = "bio")
     private String bio;
@@ -63,14 +68,20 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Set<Role> roles;
 
+    @Builder.Default
+    private Boolean locked = false;
+
+    @Builder.Default
+    private Boolean enabled = false;
+
     public User() {
     }
 
-    public User(Long id, @NotEmpty(message = "{username.blank}") @Size(min = 3, max = 20, message = "{username.length}") String userName, @Email(message = "{email.valid}", regexp = "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$") @NotEmpty(message = "{email.blank}") String email, @NotEmpty(message = "{password.blank}") String password, String bio, String city, String country, String avatar, LocalDateTime create_date, LocalDateTime modified_date, Set<Role> roles) {
+    public User(Long id, String userName, String email, String userPassword, String bio, String city, String country, String avatar, LocalDateTime create_date, LocalDateTime modified_date, Set<Role> roles, Boolean locked, Boolean enabled) {
         this.id = id;
         this.userName = userName;
         this.email = email;
-        this.password = password;
+        this.userPassword = userPassword;
         this.bio = bio;
         this.city = city;
         this.country = country;
@@ -78,6 +89,8 @@ public class User {
         this.create_date = create_date;
         this.modified_date = modified_date;
         this.roles = roles;
+        this.locked = locked;
+        this.enabled = enabled;
     }
 
     public Long getId() {
@@ -104,12 +117,28 @@ public class User {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public Boolean getLocked() {
+        return locked;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setLocked(Boolean locked) {
+        this.locked = locked;
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public String getUserPassword() {
+        return userPassword;
+    }
+
+    public void setUserPassword(String password) {
+        this.userPassword = password;
     }
 
     public String getBio() {
@@ -168,6 +197,44 @@ public class User {
         this.roles = roles;
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        SimpleGrantedAuthority simpleGrantedAuthority = null;
+        for (Role role : roles) {
+            simpleGrantedAuthority = new SimpleGrantedAuthority(role.getName());
+        }
+        return Collections.singletonList(simpleGrantedAuthority);
+    }
+
+    @Override
+    public String getPassword() {
+        return userPassword;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return !locked;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -179,7 +246,7 @@ public class User {
         if (id != null ? !id.equals(user.id) : user.id != null) return false;
         if (userName != null ? !userName.equals(user.userName) : user.userName != null) return false;
         if (email != null ? !email.equals(user.email) : user.email != null) return false;
-        if (password != null ? !password.equals(user.password) : user.password != null) return false;
+        if (userPassword != null ? !userPassword.equals(user.userPassword) : user.userPassword != null) return false;
         if (bio != null ? !bio.equals(user.bio) : user.bio != null) return false;
         if (city != null ? !city.equals(user.city) : user.city != null) return false;
         if (country != null ? !country.equals(user.country) : user.country != null) return false;
@@ -195,7 +262,7 @@ public class User {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (userName != null ? userName.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
-        result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (userPassword != null ? userPassword.hashCode() : 0);
         result = 31 * result + (bio != null ? bio.hashCode() : 0);
         result = 31 * result + (city != null ? city.hashCode() : 0);
         result = 31 * result + (country != null ? country.hashCode() : 0);
@@ -212,7 +279,7 @@ public class User {
                 "id=" + id +
                 ", userName='" + userName + '\'' +
                 ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
+                ", password='" + userPassword + '\'' +
                 ", bio='" + bio + '\'' +
                 ", city='" + city + '\'' +
                 ", country='" + country + '\'' +

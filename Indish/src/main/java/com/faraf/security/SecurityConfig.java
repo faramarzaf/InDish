@@ -48,12 +48,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
 
                 .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
-                .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-
+                /*  .and()
+                  .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+  */
                 .and().authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/api/v1/user/login/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/user/register/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/web/confirm").permitAll()
+
 
                 .antMatchers(HttpMethod.GET, "/api/v1/user/all/**").hasAuthority(admin)
                 .regexMatchers(HttpMethod.GET, "/api/v1/user/email?\\w").hasAuthority(admin)

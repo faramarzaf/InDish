@@ -14,28 +14,30 @@ public class UserGetDto {
     private String email;
     private String country;
     private String city;
-    private String password;
+    private String userPassword;
     private String bio;
     private String avatar;
     private Set<RoleDto> roles;
     private LocalDateTime create_date;
     private LocalDateTime modified_date;
+    private Boolean enabled;
 
     public UserGetDto() {
     }
 
-    public UserGetDto(Long id, String userName, String email, String country, String city, String password, String bio, String avatar, Set<RoleDto> roles, LocalDateTime create_date, LocalDateTime modified_date) {
+    public UserGetDto(Long id, String userName, String email, String country, String city, String userPassword, String bio, String avatar, Set<RoleDto> roles, LocalDateTime create_date, LocalDateTime modified_date, Boolean enabled) {
         this.id = id;
         this.userName = userName;
         this.email = email;
         this.country = country;
         this.city = city;
-        this.password = password;
+        this.userPassword = userPassword;
         this.bio = bio;
         this.avatar = avatar;
         this.roles = roles;
         this.create_date = create_date;
         this.modified_date = modified_date;
+        this.enabled = enabled;
     }
 
     public Long getId() {
@@ -70,12 +72,12 @@ public class UserGetDto {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getUserPassword() {
+        return userPassword;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
     }
 
     public String getAvatar() {
@@ -126,6 +128,14 @@ public class UserGetDto {
         this.create_date = create_date;
     }
 
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+
     @Override
     public String toString() {
         return "UserGetDto{" +
@@ -134,12 +144,13 @@ public class UserGetDto {
                 ", email='" + email + '\'' +
                 ", country='" + country + '\'' +
                 ", city='" + city + '\'' +
-                ", password='" + password + '\'' +
+                ", userPassword='" + userPassword + '\'' +
                 ", bio='" + bio + '\'' +
                 ", avatar='" + avatar + '\'' +
-                ", roleDto=" + roles +
+                ", roles=" + roles +
                 ", create_date=" + create_date +
                 ", modified_date=" + modified_date +
+                ", enabled=" + enabled +
                 '}';
     }
 }

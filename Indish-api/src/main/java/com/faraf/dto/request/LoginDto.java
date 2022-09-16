@@ -10,14 +10,14 @@ public class LoginDto {
     private String email;
 
     @NotEmpty(message = "{password.blank}")
-    private String password;
+    private String userPassword;
 
     public LoginDto() {
     }
 
-    public LoginDto(String email, String password) {
+    public LoginDto(String email, String userPassword) {
         this.email = email;
-        this.password = password;
+        this.userPassword = userPassword;
     }
 
     public String getEmail() {
@@ -28,11 +28,11 @@ public class LoginDto {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getUserPassword() {
+        return userPassword;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
     }
 }

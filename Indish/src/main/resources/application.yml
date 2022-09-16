@@ -5,6 +5,22 @@ server:
     whitelabel:
       enabled: false
 spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: <YOUR_EMAIL>
+    password: <YOUR_PASSWORD>
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          connectiontimeout: 5000
+          timeout: 3000
+          writetimeout: 5000
+    protocol: smtp
+
   datasource:
     hikari:
       maximum-pool-size: 30

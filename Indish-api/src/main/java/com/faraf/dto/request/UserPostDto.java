@@ -12,7 +12,7 @@ public class UserPostDto {
 
     private String email;
 
-    private String password;
+    private String userPassword;
 
     private String bio;
 
@@ -27,10 +27,10 @@ public class UserPostDto {
     public UserPostDto() {
     }
 
-    public UserPostDto(String userName, String email, String password, String bio, String city, String country, String avatar, Set<RoleDto> roles) {
+    public UserPostDto(String userName, String email, String userPassword, String bio, String city, String country, String avatar, Set<RoleDto> roles) {
         this.userName = userName;
         this.email = email;
-        this.password = password;
+        this.userPassword = userPassword;
         this.bio = bio;
         this.city = city;
         this.country = country;
@@ -54,12 +54,12 @@ public class UserPostDto {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getUserPassword() {
+        return userPassword;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
     }
 
     public String getBio() {
@@ -111,7 +111,7 @@ public class UserPostDto {
 
         if (userName != null ? !userName.equals(that.userName) : that.userName != null) return false;
         if (email != null ? !email.equals(that.email) : that.email != null) return false;
-        if (password != null ? !password.equals(that.password) : that.password != null) return false;
+        if (userPassword != null ? !userPassword.equals(that.userPassword) : that.userPassword != null) return false;
         if (bio != null ? !bio.equals(that.bio) : that.bio != null) return false;
         if (city != null ? !city.equals(that.city) : that.city != null) return false;
         if (country != null ? !country.equals(that.country) : that.country != null) return false;
@@ -123,7 +123,7 @@ public class UserPostDto {
     public int hashCode() {
         int result = userName != null ? userName.hashCode() : 0;
         result = 31 * result + (email != null ? email.hashCode() : 0);
-        result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (userPassword != null ? userPassword.hashCode() : 0);
         result = 31 * result + (bio != null ? bio.hashCode() : 0);
         result = 31 * result + (city != null ? city.hashCode() : 0);
         result = 31 * result + (country != null ? country.hashCode() : 0);
@@ -137,7 +137,7 @@ public class UserPostDto {
         return "UserPostDto{" +
                 "userName='" + userName + '\'' +
                 ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
+                ", userPassword='" + userPassword + '\'' +
                 ", bio='" + bio + '\'' +
                 ", city='" + city + '\'' +
                 ", country='" + country + '\'' +

@@ -6,12 +6,10 @@ import com.faraf.dto.response.CommentResponseDto;
 import com.faraf.dto.response.FoodPostResponseDto;
 import com.faraf.dto.response.JWTAuthResponse;
 import com.faraf.dto.response.UserGetDto;
+import com.faraf.entity.ConfirmationToken;
 import com.faraf.entity.Role;
 import com.faraf.entity.User;
-import com.faraf.exception.DuplicatedRecordException;
-import com.faraf.exception.InternalServerException;
-import com.faraf.exception.InvalidRoleTypeException;
-import com.faraf.exception.NotFoundException;
+import com.faraf.exception.*;
 import com.faraf.mapper.RoleMapper;
 import com.faraf.mapper.UserMapper;
 import com.faraf.repository.RoleRepository;
@@ -19,6 +17,7 @@ import com.faraf.repository.UserRepository;
 import com.faraf.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -43,6 +42,9 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
     private final FoodPostService foodPostService;
     private final CommentService commentService;
+    private final ConfirmationTokenService confirmationTokenService;
+    private final EmailSenderService emailSenderService;
+
     private final UserMapper userMapper;
     private final RoleMapper roleMapper;
     private final PasswordEncoder passwordEncoder;
@@ -51,14 +53,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public JWTAuthResponse loginUser(LoginDto loginDto) {
-        Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        UserGetDto userByEmail1 = getUserByEmail(loginDto.getEmail());
+        User user = userMapper.toEntity(userByEmail1);
+        if (user.isEnabled()) {
+            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getUserPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            // get token form tokenProvider
+            JWTAuthResponse jwtAuthResponse = tokenProvider.generateToken(authentication);
 
-        // get token form tokenProvider
-        JWTAuthResponse jwtAuthResponse = tokenProvider.generateToken(authentication);
-
-        return new JWTAuthResponse(jwtAuthResponse.getAccessToken(), jwtAuthResponse.getExpiresInMillis());
+            return new JWTAuthResponse(jwtAuthResponse.getAccessToken(), jwtAuthResponse.getExpiresInMillis());
+        }
+        throw new AuthException("Email not confirmed!");
     }
 
     @Override
@@ -66,14 +71,25 @@ public class UserServiceImpl implements UserService {
     public UserGetDto register(UserPostDto userPostDto) {
         if (validateUser(userPostDto)) {
             User user = userMapper.toEntity(userPostDto);
-            user.setPassword(passwordEncoder.encode(userPostDto.getPassword()));
+            user.setUserPassword(passwordEncoder.encode(userPostDto.getUserPassword()));
             Set<Role> roles = roleMapper.toEntity(userPostDto.getRoles());
             user.setRoles(roles);
             validateRoles(roles);
             roleRepository.saveAll(user.getRoles());
             userRepository.save(user);
+            ConfirmationToken confirmationToken = new ConfirmationToken(user);
+            confirmationTokenService.saveConfirmationToken(confirmationToken);
+            sendConfirmationMail(user.getEmail(), confirmationToken.getConfirmationToken());
             return userMapper.toUserGet(user);
         } else return null;
+    }
+
+    @Transactional
+    public void confirmUser(ConfirmationToken confirmationToken) {
+        final User user = confirmationToken.getUser();
+        user.setEnabled(true);
+        userRepository.save(user);
+        confirmationTokenService.deleteConfirmationToken(confirmationToken.getId());
     }
 
     @Override
@@ -96,9 +112,9 @@ public class UserServiceImpl implements UserService {
                 .stream()
                 .map(user -> new UserGetDto(user.getId(), user.getUserName(),
                         user.getEmail(), user.getCountry(),
-                        user.getCity(), user.getPassword(),
+                        user.getCity(), user.getUserPassword(),
                         user.getBio(), user.getAvatar(), roleMapper.toDto(user.getRoles()),
-                        user.getCreate_date(), user.getModified_date()))
+                        user.getCreate_date(), user.getModified_date(), user.getEnabled()))
                 .collect(Collectors.toList())
         );
         return responseDtoPage.getContent();
@@ -151,7 +167,7 @@ public class UserServiceImpl implements UserService {
         else if (ObjectUtils.isEmpty(userPostDto.getEmail()))
             throw new InternalServerException("The email can not be empty!");
 
-        else if (ObjectUtils.isEmpty(userPostDto.getPassword()))
+        else if (ObjectUtils.isEmpty(userPostDto.getUserPassword()))
             throw new InternalServerException("The password can not be empty!");
 
         else if (!userPostDto.getEmail().matches(emailRegex))
@@ -196,5 +212,16 @@ public class UserServiceImpl implements UserService {
             deleteFoodPostRequestDto.setFoodPostId(foodPostResponseDto.getId());
             foodPostService.deletePostByFoodId(deleteFoodPostRequestDto);
         }
+    }
+
+    private void sendConfirmationMail(String userMail, String token) {
+        final SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(userMail);
+        mailMessage.setSubject("Mail Confirmation Link!");
+        mailMessage.setFrom("<MAIL>");
+        mailMessage.setText(
+                "Thank you for registering. Please click on the below link to activate your account." + "http://localhost:8080/web/confirm?token="
+                        + token);
+        emailSenderService.sendEmail(mailMessage);
     }
 }
