@@ -7,12 +7,12 @@
     <parent>
         <groupId>com.faraf</groupId>
         <artifactId>InDish</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
 
 
     <artifactId>Indish</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>${revision}</version>
     <packaging>jar</packaging>
 
 
@@ -21,7 +21,7 @@
         <dependency>
             <groupId>com.faraf</groupId>
             <artifactId>Indish-api</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${revision}</version>
         </dependency>
 
 
