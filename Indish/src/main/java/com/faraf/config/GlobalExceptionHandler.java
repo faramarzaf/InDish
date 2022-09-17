@@ -26,7 +26,6 @@ public class GlobalExceptionHandler {
         message.setStatus(HttpStatus.NOT_FOUND.value());
         message.setMessage(e.getMessage());
         message.setPath(String.valueOf(request.getRequestURI()));
-
         return message;
     }
 
@@ -54,7 +53,6 @@ public class GlobalExceptionHandler {
         message.setStatus(HttpStatus.UNAUTHORIZED.value());
         message.setMessage(e.getMessage());
         message.setPath(String.valueOf(request.getRequestURI()));
-
         return message;
     }
 
@@ -62,14 +60,26 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InternalServerException.class)
     @ResponseBody
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-    private Message handleMessageInternalError(InternalServerException e, HttpServletRequest request) {
+    private Message handleInternalServerException(InternalServerException e, HttpServletRequest request) {
         Message message = new Message();
         message.setTimestamp(String.valueOf(getTimeStamp()));
         message.setError(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
         message.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
         message.setMessage(e.getMessage());
         message.setPath(String.valueOf(request.getRequestURI()));
+        return message;
+    }
 
+    @ResponseBody
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+    private Message handleInternalServerError(Exception e, HttpServletRequest request) {
+        Message message = new Message();
+        message.setTimestamp(String.valueOf(getTimeStamp()));
+        message.setError(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
+        message.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        message.setMessage(e.getMessage());
+        message.setPath(String.valueOf(request.getRequestURI()));
         return message;
     }
 
@@ -83,7 +93,6 @@ public class GlobalExceptionHandler {
         message.setStatus(HttpStatus.BAD_REQUEST.value());
         message.setMessage(e.getMessage());
         message.setPath(String.valueOf(request.getRequestURI()));
-
         return message;
     }
 
