@@ -4,7 +4,14 @@ server:
     include-message: always
     whitelabel:
       enabled: false
+
+
+#The AutoConfigureTestDatabase.Replace.NONE annotation property tells Spring not to replace the database with an embedded database.
+#If we didn’t do this, Spring wouldn’t be using the MySQL data source and would try to autoconfigure an embedded database instead.
 spring:
+  test:
+    database:
+      replace: none
   mail:
     host: smtp.gmail.com
     port: 587
@@ -31,7 +38,7 @@ spring:
     ## Hibernate Properties
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect

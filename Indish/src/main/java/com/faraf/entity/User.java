@@ -211,6 +211,9 @@ public class User implements UserDetails {
         return userPassword;
     }
 
+    /**
+     * be careful of this method when calling, because of another  method that exists with name 'getUserName'.
+     */
     @Override
     public String getUsername() {
         return email;
