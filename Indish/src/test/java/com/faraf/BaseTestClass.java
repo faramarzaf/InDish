@@ -1,5 +1,6 @@
 package com.faraf;
 
+import com.faraf.entity.Comment;
 import com.faraf.entity.FoodPost;
 import com.faraf.entity.User;
 
@@ -35,5 +36,13 @@ public class BaseTestClass {
         foodPost.setVeganFood(false);
         foodPost.setTimeRequired(2);
         return foodPost;
+    }
+
+    public Comment getSampleComment(User user, FoodPost foodPost) {
+        Comment comment = new Comment();
+        comment.setContent("This is sample comment");
+        comment.setUser(user);
+        comment.setPost(foodPost);
+        return comment;
     }
 }

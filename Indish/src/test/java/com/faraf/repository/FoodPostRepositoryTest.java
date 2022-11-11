@@ -26,17 +26,17 @@ public class FoodPostRepositoryTest extends BaseTestClass {
 
     private FoodPost sampleVeganFoodPost;
     private FoodPost sampleNonVeganFoodPost;
-    private User user;
+    private User sampleUser;
 
     @Before
     public void setUp() {
         sampleVeganFoodPost = getSampleVeganFoodPost();
         sampleNonVeganFoodPost = getSampleNonVeganFoodPost();
-        User sampleUser = getCorrectSampleUser();
+        sampleUser = getCorrectSampleUser();
 
         sampleVeganFoodPost = foodPostRepository.save(sampleVeganFoodPost);
         sampleNonVeganFoodPost = foodPostRepository.save(sampleNonVeganFoodPost);
-        user = userRepository.save(sampleUser);
+        sampleUser = userRepository.save(sampleUser);
     }
 
     @Test
@@ -46,55 +46,62 @@ public class FoodPostRepositoryTest extends BaseTestClass {
 
     @Test
     public void it_should_find_posts_by_userId() {
-        sampleVeganFoodPost.setUser(user);
-        List<FoodPost> allByUserId = foodPostRepository.findAllByUser_Id(user.getId());
+        sampleVeganFoodPost.setUser(sampleUser);
+        List<FoodPost> allByUserId = foodPostRepository.findAllByUser_Id(sampleUser.getId());
         assertThat(allByUserId).isNotNull();
+        assertThat(allByUserId).isNotEmpty();
     }
 
     @Test
     public void it_should_find_posts_by_username() {
-        sampleVeganFoodPost.setUser(user);
-        List<FoodPost> allByUsername = foodPostRepository.findByUser_UserName(user.getUserName());
+        sampleVeganFoodPost.setUser(sampleUser);
+        List<FoodPost> allByUsername = foodPostRepository.findByUser_UserName(sampleUser.getUserName());
         assertThat(allByUsername).isNotNull();
+        assertThat(allByUsername).isNotEmpty();
     }
 
     @Test
     public void it_should_find_posts_by_food_originCountry() {
-        sampleVeganFoodPost.setUser(user);
+        sampleVeganFoodPost.setUser(sampleUser);
         List<FoodPost> allByFoodOriginCountry = foodPostRepository.findAllByOriginCountry(sampleVeganFoodPost.getOriginCountry());
         assertThat(allByFoodOriginCountry).isNotNull();
+        assertThat(allByFoodOriginCountry).isNotEmpty();
     }
 
     @Test
     public void it_should_find_all_vegan_foods() {
-        sampleVeganFoodPost.setUser(user);
-        sampleNonVeganFoodPost.setUser(user);
+        sampleVeganFoodPost.setUser(sampleUser);
+        sampleNonVeganFoodPost.setUser(sampleUser);
         List<FoodPost> allVeganFoods = foodPostRepository.findAllByVeganFoodTrue();
         assertThat(allVeganFoods).isNotNull();
+        assertThat(allVeganFoods).isNotEmpty();
         assertThat(allVeganFoods).doesNotContain(sampleNonVeganFoodPost);
     }
 
     @Test
     public void it_should_find_all_non_vegan_foods() {
-        sampleVeganFoodPost.setUser(user);
-        sampleNonVeganFoodPost.setUser(user);
+        sampleVeganFoodPost.setUser(sampleUser);
+        sampleNonVeganFoodPost.setUser(sampleUser);
         List<FoodPost> allNonVeganFoods = foodPostRepository.findAllByVeganFoodFalse();
         assertThat(allNonVeganFoods).isNotNull();
+        assertThat(allNonVeganFoods).isNotEmpty();
         assertThat(allNonVeganFoods).doesNotContain(sampleVeganFoodPost);
     }
 
     @Test
     public void it_should_find_foods_with_given_time_required_to_ready() {
-        sampleVeganFoodPost.setUser(user);
+        sampleVeganFoodPost.setUser(sampleUser);
         List<FoodPost> allByTimeRequiredEquals = foodPostRepository.findAllByTimeRequiredEquals(sampleVeganFoodPost.getTimeRequired());
         assertThat(allByTimeRequiredEquals).isNotNull();
+        assertThat(allByTimeRequiredEquals).isNotEmpty();
     }
 
     @Test
     public void it_should_find_foods_with_given_startTime_and_endTime_required_to_ready() {
-        sampleVeganFoodPost.setUser(user);
+        sampleVeganFoodPost.setUser(sampleUser);
         List<FoodPost> allByTimeRequiredBetween = foodPostRepository.findAllByTimeRequiredBetween(0, sampleVeganFoodPost.getTimeRequired());
         assertThat(allByTimeRequiredBetween).isNotNull();
+        assertThat(allByTimeRequiredBetween).isNotEmpty();
     }
 
 

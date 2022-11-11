@@ -22,53 +22,56 @@ public class UserRepositoryTest extends BaseTestClass {
     @Autowired
     private UserRepository userRepository;
 
-    private User user;
+    private User sampleUser;
 
     @Before
     public void setUp() {
-        User sampleUser = getCorrectSampleUser();
-        user = userRepository.save(sampleUser);
+        sampleUser = getCorrectSampleUser();
+        sampleUser = userRepository.save(sampleUser);
     }
 
     @Test
     public void saved_user_should_be_present() {
-        assertThat(userRepository.findById(user.getId()).get()).isEqualTo(user);
+        assertThat(userRepository.findById(sampleUser.getId()).get()).isEqualTo(sampleUser);
     }
 
     @Test
     public void user_should_exists_by_email() {
-        assertThat(userRepository.existsUserByEmail(user.getEmail())).isEqualTo(true);
+        assertThat(userRepository.existsUserByEmail(sampleUser.getEmail())).isEqualTo(true);
     }
 
 
     @Test
     public void user_should_exists_by_username() {
-        assertThat(userRepository.existsUserByUserName(user.getUserName())).isEqualTo(true);
+        assertThat(userRepository.existsUserByUserName(sampleUser.getUserName())).isEqualTo(true);
     }
 
     @Test
     public void it_should_find_user_by_id() {
-        Optional<User> userById = userRepository.findUserById(user.getId());
+        Optional<User> userById = userRepository.findUserById(sampleUser.getId());
         assertThat(userById).isNotNull();
+        assertThat(userById).isNotEmpty();
     }
 
     @Test
     public void it_should_find_user_by_username() {
-        Optional<User> byUserName = userRepository.findByUserName(user.getUserName());
+        Optional<User> byUserName = userRepository.findByUserName(sampleUser.getUserName());
         assertThat(byUserName).isNotNull();
+        assertThat(byUserName).isNotEmpty();
     }
 
     @Test
     public void it_should_find_user_by_email() {
-        Optional<User> byEmail = userRepository.findByEmail(user.getEmail());
+        Optional<User> byEmail = userRepository.findByEmail(sampleUser.getEmail());
         assertThat(byEmail).isNotNull();
+        assertThat(byEmail).isNotEmpty();
     }
 
     @Test
     public void it_should_delete_user_by_id() {
-        assertThat(userRepository.findUserById(user.getId())).isNotEmpty();
-        userRepository.deleteUserById(user.getId());
-        assertThat(userRepository.findUserById(user.getId())).isEmpty();
+        assertThat(userRepository.findUserById(sampleUser.getId())).isNotEmpty();
+        userRepository.deleteUserById(sampleUser.getId());
+        assertThat(userRepository.findUserById(sampleUser.getId())).isEmpty();
     }
 
     @Test
