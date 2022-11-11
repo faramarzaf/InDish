@@ -22,6 +22,7 @@ public class BaseTestClass {
         foodPost.setDescription("sample description");
         foodPost.setOriginCountry("italy");
         foodPost.setVeganFood(true);
+        foodPost.setTimeRequired(1);
         return foodPost;
     }
 
@@ -32,6 +33,7 @@ public class BaseTestClass {
         foodPost.setDescription("sample description");
         foodPost.setOriginCountry("italy");
         foodPost.setVeganFood(false);
+        foodPost.setTimeRequired(2);
         return foodPost;
     }
 }
