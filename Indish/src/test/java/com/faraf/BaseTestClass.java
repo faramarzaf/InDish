@@ -1,8 +1,8 @@
 package com.faraf;
 
-import com.faraf.entity.Comment;
-import com.faraf.entity.FoodPost;
-import com.faraf.entity.User;
+import com.faraf.entity.*;
+
+import java.time.LocalDateTime;
 
 public class BaseTestClass {
 
@@ -44,5 +44,20 @@ public class BaseTestClass {
         comment.setUser(user);
         comment.setPost(foodPost);
         return comment;
+    }
+
+    public Ingredient getSampleIngredient(FoodPost foodPost) {
+        Ingredient ingredient = new Ingredient();
+        ingredient.setContent("Sample ingredient");
+        ingredient.setFoodPost(foodPost);
+        return ingredient;
+    }
+
+    public ConfirmationToken getSampleConfirmationToken(User user) {
+        ConfirmationToken confirmationToken = new ConfirmationToken();
+        confirmationToken.setUser(user);
+        confirmationToken.setConfirmationToken("token");
+        confirmationToken.setCreatedDate(LocalDateTime.now());
+        return confirmationToken;
     }
 }

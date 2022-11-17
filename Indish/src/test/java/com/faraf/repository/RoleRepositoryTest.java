@@ -1,7 +1,6 @@
 package com.faraf.repository;
 
 import com.faraf.entity.Role;
-import com.faraf.entity.User;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,8 +21,8 @@ public class RoleRepositoryTest {
 
     @Before
     public void setUp() {
-        Role sampleUser = getSampleRole();
-        role = roleRepository.save(sampleUser);
+        role = getSampleRole();
+        role = roleRepository.save(role);
     }
 
     @Test
