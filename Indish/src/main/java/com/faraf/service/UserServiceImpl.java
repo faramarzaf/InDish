@@ -144,7 +144,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public String deleteUserById(Long id) {
-        removeUserChildes(id);
+        removeUserChildren(id);
         userRepository.deleteUserById(id);
         return "User with id: " + id + " deleted successfully!";
     }
@@ -195,7 +195,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    private void removeUserChildes(Long userId) {
+    private void removeUserChildren(Long userId) {
         List<CommentResponseDto> allCommentsByUserId = commentService.findByUserId(userId);
         List<FoodPostResponseDto> allFoodsByUserId = foodPostService.findAllByUserId(userId);
 

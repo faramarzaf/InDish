@@ -9,7 +9,6 @@ import com.faraf.entity.FoodPost;
 import com.faraf.exception.NotFoundException;
 import com.faraf.mapper.FoodMapper;
 import com.faraf.repository.FoodPostRepository;
-import com.faraf.utility.GeneralMessages;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -101,11 +100,11 @@ public class FoodPostServiceImpl implements FoodPostService {
     @Override
     @Transactional
     public void deletePostByFoodId(DeleteFoodPostRequestDto requestDto) {
-        removeFoodChildes(requestDto);
+        removeFoodChildren(requestDto);
         foodPostRepository.deleteById(requestDto.getFoodPostId());
     }
 
-    private void removeFoodChildes(DeleteFoodPostRequestDto requestDto) {
+    private void removeFoodChildren(DeleteFoodPostRequestDto requestDto) {
         List<IngredientResponseDto> allIngredientsByFoodId = ingredientService.getIngredientsByFoodId(requestDto.getFoodPostId());
         List<CommentResponseDto> allCommentsByFoodId = commentService.findByFoodPostId(requestDto.getFoodPostId());
 
