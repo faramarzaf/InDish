@@ -2,20 +2,19 @@ package com.faraf.repository;
 
 import com.faraf.BaseTestClass;
 import com.faraf.entity.User;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.validation.ConstraintViolationException;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@RunWith(SpringRunner.class)
+
 @DataJpaTest
 public class UserRepositoryTest extends BaseTestClass {
 
@@ -24,7 +23,7 @@ public class UserRepositoryTest extends BaseTestClass {
 
     private User sampleUser;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         sampleUser = getCorrectSampleUser();
         sampleUser = userRepository.save(sampleUser);
@@ -86,8 +85,7 @@ public class UserRepositoryTest extends BaseTestClass {
     public void it_should_not_save_user_with_empty_email() {
         User user = new User();
         user.setUserName("user1");
-        assertThatThrownBy(() -> userRepository.save(user))
-                .isInstanceOf(ConstraintViolationException.class);
+        assertThrows(ConstraintViolationException.class, () -> userRepository.save(user));
     }
 
     @Test
@@ -95,8 +93,7 @@ public class UserRepositoryTest extends BaseTestClass {
         User user = new User();
         user.setUserName("user1");
         user.setEmail("samplegmail.10");
-        assertThatThrownBy(() -> userRepository.save(user))
-                .isInstanceOf(ConstraintViolationException.class);
+        assertThrows(ConstraintViolationException.class, () -> userRepository.save(user));
     }
 
     @Test
@@ -105,8 +102,7 @@ public class UserRepositoryTest extends BaseTestClass {
         user.setUserName("user1");
         user.setEmail("sample@gmail.com");
         user.setBio("sample bio");
-        assertThatThrownBy(() -> userRepository.save(user))
-                .isInstanceOf(ConstraintViolationException.class);
+        assertThrows(ConstraintViolationException.class, () -> userRepository.save(user));
     }
 
 

@@ -26,6 +26,9 @@
         <spring.security.core.version>5.4.7</spring.security.core.version>
         <mapstrcut.version>1.4.2.Final</mapstrcut.version>
         <jjwt.version>0.9.1</jjwt.version>
+        <junit.version>5.9.1</junit.version>
+        <jjwt.version>0.9.1</jjwt.version>
+        <springboot.validation.version>2.4.0</springboot.validation.version>
     </properties>
 
     <modules>

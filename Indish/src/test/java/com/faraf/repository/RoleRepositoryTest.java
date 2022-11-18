@@ -1,16 +1,14 @@
 package com.faraf.repository;
 
 import com.faraf.entity.Role;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringRunner.class)
+
 @DataJpaTest
 public class RoleRepositoryTest {
 
@@ -19,7 +17,7 @@ public class RoleRepositoryTest {
 
     private Role role;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         role = getSampleRole();
         role = roleRepository.save(role);

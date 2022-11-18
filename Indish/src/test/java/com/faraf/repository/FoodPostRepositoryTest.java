@@ -3,18 +3,16 @@ package com.faraf.repository;
 import com.faraf.BaseTestClass;
 import com.faraf.entity.FoodPost;
 import com.faraf.entity.User;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringRunner.class)
+
 @DataJpaTest
 public class FoodPostRepositoryTest extends BaseTestClass {
 
@@ -28,15 +26,10 @@ public class FoodPostRepositoryTest extends BaseTestClass {
     private FoodPost sampleNonVeganFoodPost;
     private User sampleUser;
 
-    @Before
+    @BeforeEach
     public void setUp() {
-        sampleVeganFoodPost = getSampleVeganFoodPost();
-        sampleNonVeganFoodPost = getSampleNonVeganFoodPost();
-        sampleUser = getCorrectSampleUser();
-
-        sampleVeganFoodPost = foodPostRepository.save(sampleVeganFoodPost);
-        sampleNonVeganFoodPost = foodPostRepository.save(sampleNonVeganFoodPost);
-        sampleUser = userRepository.save(sampleUser);
+        initSampleData();
+        saveSampleData();
     }
 
     @Test
@@ -104,5 +97,15 @@ public class FoodPostRepositoryTest extends BaseTestClass {
         assertThat(allByTimeRequiredBetween).isNotEmpty();
     }
 
+    private void saveSampleData() {
+        sampleVeganFoodPost = foodPostRepository.save(sampleVeganFoodPost);
+        sampleNonVeganFoodPost = foodPostRepository.save(sampleNonVeganFoodPost);
+        sampleUser = userRepository.save(sampleUser);
+    }
 
+    private void initSampleData() {
+        sampleVeganFoodPost = getSampleVeganFoodPost();
+        sampleNonVeganFoodPost = getSampleNonVeganFoodPost();
+        sampleUser = getCorrectSampleUser();
+    }
 }

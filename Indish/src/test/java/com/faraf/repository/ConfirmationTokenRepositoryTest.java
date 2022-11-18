@@ -3,18 +3,15 @@ package com.faraf.repository;
 import com.faraf.BaseTestClass;
 import com.faraf.entity.ConfirmationToken;
 import com.faraf.entity.User;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringRunner.class)
 @DataJpaTest
 public class ConfirmationTokenRepositoryTest extends BaseTestClass {
 
@@ -27,12 +24,10 @@ public class ConfirmationTokenRepositoryTest extends BaseTestClass {
     private ConfirmationToken sampleConfirmationToken;
     private User sampleUser;
 
-    @Before
+    @BeforeEach
     public void setUp() {
-        sampleUser = getCorrectSampleUser();
-        sampleConfirmationToken = getSampleConfirmationToken(sampleUser);
-        sampleUser = userRepository.save(sampleUser);
-        sampleConfirmationToken = confirmationTokenRepository.save(sampleConfirmationToken);
+        initSampleData();
+        saveSampleData();
     }
 
     @Test
@@ -52,5 +47,15 @@ public class ConfirmationTokenRepositoryTest extends BaseTestClass {
         Optional<ConfirmationToken> confirmationTokenByConfirmationToken = confirmationTokenRepository.findConfirmationTokenByConfirmationToken(sampleConfirmationToken.getConfirmationToken());
         assertThat(confirmationTokenByConfirmationToken).isNotNull();
         assertThat(confirmationTokenByConfirmationToken).isNotEmpty();
+    }
+
+    private void saveSampleData() {
+        sampleUser = userRepository.save(sampleUser);
+        sampleConfirmationToken = confirmationTokenRepository.save(sampleConfirmationToken);
+    }
+
+    private void initSampleData() {
+        sampleUser = getCorrectSampleUser();
+        sampleConfirmationToken = getSampleConfirmationToken(sampleUser);
     }
 }
