@@ -14,8 +14,6 @@ import com.faraf.mapper.UserMapper;
 import com.faraf.repository.RoleRepository;
 import com.faraf.repository.UserRepository;
 import com.faraf.security.JwtTokenProvider;
-
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,14 +23,17 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.*;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -181,12 +182,83 @@ public class UserServiceTest extends BaseTestClass {
         verify(userRepository, times(1)).findUserById(anyLong());
     }
 
+
     @Test
-    public void get_user_by_id_should_throw_exception_when_record_not_exists() {
-        when(userRepository.findUserById(1L)).thenReturn(Optional.empty());
-        assertThatThrownBy(() -> userService.getUserById(1L))
-                .isInstanceOf(NotFoundException.class)
-                .hasMessage("The user not found with id:" + 1L);
+    public void get_user_by_username_should_return_record() {
+        when(userRepository.findByUserName(anyString())).thenReturn(Optional.of(sampleUser));
+        UserGetDto userGetDto = userService.getUserByUsername(anyString());
+        User user = userMapper.toEntity(userGetDto);
+        assertEquals(sampleUser, user);
+        verify(userRepository, times(1)).findByUserName(anyString());
     }
 
+    @Test
+    public void get_user_by_email_should_return_record() {
+        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(sampleUser));
+        UserGetDto userGetDto = userService.getUserByEmail(anyString());
+        User user = userMapper.toEntity(userGetDto);
+        assertEquals(sampleUser, user);
+        verify(userRepository, times(1)).findByEmail(anyString());
+    }
+
+    @Test
+    public void get_user_by_id_should_throw_exception_when_record_not_exists() {
+        long userId = 1L;
+        when(userRepository.findUserById(userId)).thenReturn(Optional.empty());
+        assertThatThrownBy(() -> userService.getUserById(userId))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage("The user not found with id:" + userId);
+    }
+
+    @Test
+    public void get_user_by_username_should_throw_exception_when_record_not_exists() {
+        when(userRepository.findByUserName("user")).thenReturn(Optional.empty());
+        assertThatThrownBy(() -> userService.getUserByUsername("user"))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage("The user not found with username:user");
+    }
+
+    @Test
+    public void get_user_by_email_should_throw_exception_when_record_not_exists() {
+        when(userRepository.findByEmail("email")).thenReturn(Optional.empty());
+        assertThatThrownBy(() -> userService.getUserByEmail("email"))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage("The user not found with email:email");
+    }
+
+    @Test
+    public void delete_user_by_id_test() {
+        long userId = 1L;
+        doNothing().when(userRepository).deleteUserById(userId);
+        String response = userService.deleteUserById(userId);
+        verify(userRepository, times(1)).deleteUserById(userId);
+        assertEquals("User with id: " + userId + " deleted successfully!", response);
+    }
+
+    @Test
+    public void exists_user_by_email_should_return_true() {
+        when(userRepository.existsUserByEmail(anyString())).thenReturn(true);
+        boolean existsUserByEmail = userService.existsUserByEmail(anyString());
+        assertTrue(existsUserByEmail);
+    }
+
+    @Test
+    public void exists_user_by_email_should_not_return_false() {
+        when(userRepository.existsUserByEmail(anyString())).thenReturn(false);
+        boolean existsUserByEmail = userService.existsUserByEmail(anyString());
+        assertFalse(existsUserByEmail);
+    }
+
+    @Test
+    public void get_all_users_should_return_list() {
+        Pageable pageable = PageRequest.of(1, 10, Sort.by("id"));
+        Page<User> page = new PageImpl<>(Collections.singletonList(sampleUser));
+        when(userRepository.findAll(pageable)).thenReturn(page);
+        List<UserGetDto> allUsers = userService.getAllUsers(1, 10, "id");
+        assertThat(allUsers).hasSize(1);
+        verify(userRepository, times(1)).findAll(pageable);
+    }
+
+
 }
+
