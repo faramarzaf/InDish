@@ -1,14 +1,14 @@
 package com.faraf.service;
 
 import com.faraf.BaseTestClass;
+import com.faraf.dto.request.LoginDto;
+import com.faraf.dto.request.UserInfoUpdateRequestDto;
 import com.faraf.dto.request.UserPostDto;
+import com.faraf.dto.response.JWTAuthResponse;
 import com.faraf.dto.response.UserGetDto;
 import com.faraf.entity.Role;
 import com.faraf.entity.User;
-import com.faraf.exception.DuplicatedRecordException;
-import com.faraf.exception.InternalServerException;
-import com.faraf.exception.InvalidRoleTypeException;
-import com.faraf.exception.NotFoundException;
+import com.faraf.exception.*;
 import com.faraf.mapper.RoleMapper;
 import com.faraf.mapper.UserMapper;
 import com.faraf.repository.RoleRepository;
@@ -25,6 +25,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.*;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Collections;
@@ -259,6 +261,60 @@ public class UserServiceTest extends BaseTestClass {
         verify(userRepository, times(1)).findAll(pageable);
     }
 
+
+    @Test
+    public void update_user_info_test() {
+        long userId = 1L;
+        UserInfoUpdateRequestDto userInfoUpdateRequestDto = new UserInfoUpdateRequestDto();
+        userInfoUpdateRequestDto.setBio("new bio");
+        userInfoUpdateRequestDto.setCity("new city");
+        userInfoUpdateRequestDto.setCountry("new country");
+        userInfoUpdateRequestDto.setAvatar("new avatar");
+
+        sampleUser.setBio(userInfoUpdateRequestDto.getBio());
+        sampleUser.setCity(userInfoUpdateRequestDto.getCity());
+        sampleUser.setCountry(userInfoUpdateRequestDto.getCountry());
+        sampleUser.setAvatar(userInfoUpdateRequestDto.getAvatar());
+
+        when(userRepository.findUserById(userId)).thenReturn(Optional.ofNullable(sampleUser));
+        userService.updateUserInfo(userInfoUpdateRequestDto, userId);
+        assertEquals("new bio", sampleUser.getBio());
+        assertEquals("new city", sampleUser.getCity());
+        assertEquals("new country", sampleUser.getCountry());
+        assertEquals("new avatar", sampleUser.getAvatar());
+        verify(userRepository, times(1)).findUserById(userId);
+        verify(userRepository, times(1)).save(sampleUser);
+    }
+
+
+    @Test
+    public void should_login_user_() {
+        Authentication authentication = mock(Authentication.class);
+        UsernamePasswordAuthenticationToken principal = new UsernamePasswordAuthenticationToken(sampleUser.getEmail(), sampleUser.getUserPassword());
+
+        when(authenticationManager.authenticate(principal)).thenReturn(authentication);
+        when(tokenProvider.generateToken(authentication)).thenReturn(new JWTAuthResponse("token", "68000"));
+
+        sampleUser.setEnabled(true);
+        LoginDto loginDto = new LoginDto();
+        loginDto.setEmail(sampleUser.getEmail());
+        loginDto.setUserPassword(sampleUser.getUserPassword());
+        when(userRepository.findByEmail(anyString())).thenReturn(Optional.ofNullable(sampleUser));
+        JWTAuthResponse jwtAuthResponse = userService.loginUser(loginDto);
+        assertNotNull(jwtAuthResponse);
+    }
+
+    @Test
+    public void should_throw_exception_login_user_when_user_not_enabled() {
+        LoginDto loginDto = new LoginDto();
+        loginDto.setEmail(sampleUser.getEmail());
+        loginDto.setUserPassword(sampleUser.getUserPassword());
+        when(userRepository.findByEmail(anyString())).thenReturn(Optional.ofNullable(sampleUser));
+
+        assertThatThrownBy(() -> userService.loginUser(loginDto))
+                .isInstanceOf(AuthException.class)
+                .hasMessage("Email not confirmed!");
+    }
 
 }
 
