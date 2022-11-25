@@ -6,6 +6,7 @@ import com.faraf.dto.request.UserInfoUpdateRequestDto;
 import com.faraf.dto.request.UserPostDto;
 import com.faraf.dto.response.JWTAuthResponse;
 import com.faraf.dto.response.UserGetDto;
+import com.faraf.entity.ConfirmationToken;
 import com.faraf.entity.Role;
 import com.faraf.entity.User;
 import com.faraf.exception.*;
@@ -314,6 +315,14 @@ public class UserServiceTest extends BaseTestClass {
         assertThatThrownBy(() -> userService.loginUser(loginDto))
                 .isInstanceOf(AuthException.class)
                 .hasMessage("Email not confirmed!");
+    }
+
+    @Test
+    public void confirm_user_test() {
+        ConfirmationToken confirmationToken = new ConfirmationToken();
+        confirmationToken.setUser(sampleUser);
+        userService.confirmUser(confirmationToken);
+        verify(userRepository, times(1)).save(sampleUser);
     }
 
 }
