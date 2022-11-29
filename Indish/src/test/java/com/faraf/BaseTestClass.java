@@ -27,6 +27,17 @@ public class BaseTestClass {
         return foodPost;
     }
 
+    public FoodPost getSampleVeganFoodPost(User user) {
+        FoodPost foodPost = new FoodPost();
+        foodPost.setName("food name");
+        foodPost.setDescription("sample description");
+        foodPost.setOriginCountry("italy");
+        foodPost.setVeganFood(true);
+        foodPost.setTimeRequired(1);
+        foodPost.setUser(user);
+        return foodPost;
+    }
+
 
     public FoodPost getSampleNonVeganFoodPost() {
         FoodPost foodPost = new FoodPost();

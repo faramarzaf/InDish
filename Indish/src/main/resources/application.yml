@@ -4,6 +4,7 @@ server:
     include-message: always
     whitelabel:
       enabled: false
+  port: 8080
 
 
 #The AutoConfigureTestDatabase.Replace.NONE annotation property tells Spring not to replace the database with an embedded database.
