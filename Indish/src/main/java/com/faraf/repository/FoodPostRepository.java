@@ -1,6 +1,8 @@
 package com.faraf.repository;
 
 import com.faraf.entity.FoodPost;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,17 +13,18 @@ public interface FoodPostRepository extends PagingAndSortingRepository<FoodPost,
 
     List<FoodPost> findAllByUser_Id(Long userId);
 
-    List<FoodPost> findByUser_UserName(String username);
+    Page<FoodPost> findAllByUser_Id(Long userId, Pageable pageable);
 
-    List<FoodPost> findAllByOriginCountry(String country);
+    Page<FoodPost> findByUser_UserName(String username, Pageable pageable);
 
-    List<FoodPost> findAllByVeganFoodTrue();
+    Page<FoodPost> findAllByOriginCountry(String country, Pageable pageable);
 
-    List<FoodPost> findAllByVeganFoodFalse();
+    Page<FoodPost> findAllByVeganFoodTrue(Pageable pageable);
 
-    List<FoodPost> findAllByTimeRequiredEquals(int hour);
+    Page<FoodPost> findAllByVeganFoodFalse(Pageable pageable);
 
-    List<FoodPost> findAllByTimeRequiredBetween(int startHour, int endHour);
+    Page<FoodPost> findAllByTimeRequiredEquals(int hour, Pageable pageable);
 
+    Page<FoodPost> findAllByTimeRequiredBetween(int startHour, int endHour, Pageable pageable);
 
 }

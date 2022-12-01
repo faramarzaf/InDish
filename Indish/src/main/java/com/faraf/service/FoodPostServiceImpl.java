@@ -10,6 +10,10 @@ import com.faraf.exception.NotFoundException;
 import com.faraf.mapper.FoodMapper;
 import com.faraf.repository.FoodPostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,44 +48,58 @@ public class FoodPostServiceImpl implements FoodPostService {
     }
 
     @Override
-    public List<FoodPostResponseDto> findAllByUsername(String username) {
-        List<FoodPost> allByUser_userName = foodPostRepository.findByUser_UserName(username);
-        return foodMapper.toFoodPostResponseDto(allByUser_userName);
-    }
-
-    @Override
     public List<FoodPostResponseDto> findAllByUserId(Long userId) {
-        List<FoodPost> allByUser_id = foodPostRepository.findAllByUser_Id(userId);
-        return foodMapper.toFoodPostResponseDto(allByUser_id);
+        List<FoodPost> allPostsByUserId = foodPostRepository.findAllByUser_Id(userId);
+        return foodMapper.toFoodPostResponseDto(allPostsByUserId);
     }
 
     @Override
-    public List<FoodPostResponseDto> findAllByOriginCountry(String country) {
-        return foodMapper.toFoodPostResponseDto(foodPostRepository.findAllByOriginCountry(country));
+    public List<FoodPostResponseDto> findAllByUsername(String username, int pageNo, int pageSize, String sort) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sort));
+        Page<FoodPost> allPostsByUsername = foodPostRepository.findByUser_UserName(username, pageable);
+        return foodMapper.toFoodPostResponseDto(allPostsByUsername.getContent());
     }
 
     @Override
-    public List<FoodPostResponseDto> findAllByVeganFoodTrue() {
-        return foodMapper.toFoodPostResponseDto(foodPostRepository.findAllByVeganFoodTrue());
-
+    public List<FoodPostResponseDto> findAllByUserId(Long userId, int pageNo, int pageSize, String sort) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sort));
+        Page<FoodPost> allPostsByUserId = foodPostRepository.findAllByUser_Id(userId, pageable);
+        return foodMapper.toFoodPostResponseDto(allPostsByUserId.getContent());
     }
 
     @Override
-    public List<FoodPostResponseDto> findAllByVeganFoodFalse() {
-        return foodMapper.toFoodPostResponseDto(foodPostRepository.findAllByVeganFoodFalse());
-
+    public List<FoodPostResponseDto> findAllByOriginCountry(String country, int pageNo, int pageSize, String sort) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sort));
+        Page<FoodPost> allByOriginCountry = foodPostRepository.findAllByOriginCountry(country, pageable);
+        return foodMapper.toFoodPostResponseDto(allByOriginCountry.getContent());
     }
 
     @Override
-    public List<FoodPostResponseDto> findAllByTimeRequiredEquals(int hour) {
-        return foodMapper.toFoodPostResponseDto(foodPostRepository.findAllByTimeRequiredEquals(hour));
-
+    public List<FoodPostResponseDto> findAllByVeganFoodTrue(int pageNo, int pageSize, String sort) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sort));
+        Page<FoodPost> allByVeganFoodTrue = foodPostRepository.findAllByVeganFoodTrue(pageable);
+        return foodMapper.toFoodPostResponseDto(allByVeganFoodTrue.getContent());
     }
 
     @Override
-    public List<FoodPostResponseDto> findAllByTimeRequiredBetween(int startHour, int endHour) {
-        return foodMapper.toFoodPostResponseDto(foodPostRepository.findAllByTimeRequiredBetween(startHour, endHour));
+    public List<FoodPostResponseDto> findAllByVeganFoodFalse(int pageNo, int pageSize, String sort) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sort));
+        Page<FoodPost> allByVeganFoodFalse = foodPostRepository.findAllByVeganFoodFalse(pageable);
+        return foodMapper.toFoodPostResponseDto(allByVeganFoodFalse.getContent());
+    }
 
+    @Override
+    public List<FoodPostResponseDto> findAllByTimeRequiredEquals(int hour, int pageNo, int pageSize, String sort) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sort));
+        Page<FoodPost> allByTimeRequiredEquals = foodPostRepository.findAllByTimeRequiredEquals(hour, pageable);
+        return foodMapper.toFoodPostResponseDto(allByTimeRequiredEquals.getContent());
+    }
+
+    @Override
+    public List<FoodPostResponseDto> findAllByTimeRequiredBetween(int startHour, int endHour, int pageNo, int pageSize, String sort) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sort));
+        Page<FoodPost> allByTimeRequiredBetween = foodPostRepository.findAllByTimeRequiredBetween(startHour, endHour, pageable);
+        return foodMapper.toFoodPostResponseDto(allByTimeRequiredBetween.getContent());
     }
 
     @Override

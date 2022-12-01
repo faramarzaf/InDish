@@ -11,6 +11,10 @@ import com.faraf.mapper.FoodMapper;
 import com.faraf.mapper.IngredientMapper;
 import com.faraf.repository.IngredientRepository;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
@@ -53,21 +57,32 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public List<IngredientResponseDto> getIngredientsByFoodName(String foodName) {
-        List<Ingredient> ingredientsByFoodName = ingredientRepository.findAllByFoodPost_Name(foodName);
-        if (ObjectUtils.isEmpty(ingredientsByFoodName))
-            throw new NotFoundException("Not found any ingredients with food name:" + foodName);
-
-        return ingredientMapper.toIngredientsResponseDto(ingredientsByFoodName);
-    }
-
-    @Override
     public List<IngredientResponseDto> getIngredientsByFoodId(Long foodId) {
         List<Ingredient> ingredientsByFoodId = ingredientRepository.findAllByFoodPost_Id(foodId);
         if (ObjectUtils.isEmpty(ingredientsByFoodId))
             throw new NotFoundException("Not found any ingredients with food id:" + foodId);
 
         return ingredientMapper.toIngredientsResponseDto(ingredientsByFoodId);
+    }
+
+    @Override
+    public List<IngredientResponseDto> getIngredientsByFoodName(String foodName, int pageNo, int pageSize, String sort) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sort));
+        Page<Ingredient> ingredientsByFoodName = ingredientRepository.findAllByFoodPost_Name(foodName, pageable);
+        if (ObjectUtils.isEmpty(ingredientsByFoodName.getContent()))
+            throw new NotFoundException("Not found any ingredients with food name:" + foodName);
+
+        return ingredientMapper.toIngredientsResponseDto(ingredientsByFoodName.getContent());
+    }
+
+    @Override
+    public List<IngredientResponseDto> getIngredientsByFoodId(Long foodId, int pageNo, int pageSize, String sort) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sort));
+        Page<Ingredient> ingredientsByFoodId = ingredientRepository.findAllByFoodPost_Id(foodId, pageable);
+        if (ObjectUtils.isEmpty(ingredientsByFoodId.getContent()))
+            throw new NotFoundException("Not found any ingredients with food id:" + foodId);
+
+        return ingredientMapper.toIngredientsResponseDto(ingredientsByFoodId.getContent());
     }
 
     @Override

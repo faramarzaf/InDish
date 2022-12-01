@@ -20,24 +20,30 @@ public class IngredientController {
     @PostMapping("/save")
     @PreAuthorize("#requestDto.userId == authentication.principal.id")
     public IngredientResponseDto save(@RequestBody IngredientsRequestDto requestDto, @RequestParam Long foodId) {
-       return ingredientService.addIngredientToFood(requestDto, foodId);
+        return ingredientService.addIngredientToFood(requestDto, foodId);
     }
 
     @GetMapping("/by-food-name")
-    public List<IngredientResponseDto> getIngredientsByFoodName(@RequestParam String foodName) {
-        return ingredientService.getIngredientsByFoodName(foodName);
+    public List<IngredientResponseDto> getIngredientsByFoodName(@RequestParam String foodName,
+                                                                @RequestParam int pageNo,
+                                                                @RequestParam int pageSize,
+                                                                @RequestParam String sort) {
+        return ingredientService.getIngredientsByFoodName(foodName, pageNo, pageSize, sort);
     }
 
 
     @GetMapping("/by-food-id")
-    public List<IngredientResponseDto> getIngredientsByFoodId(@RequestParam Long foodId) {
-        return ingredientService.getIngredientsByFoodId(foodId);
+    public List<IngredientResponseDto> getIngredientsByFoodId(@RequestParam Long foodId,
+                                                              @RequestParam int pageNo,
+                                                              @RequestParam int pageSize,
+                                                              @RequestParam String sort) {
+        return ingredientService.getIngredientsByFoodId(foodId, pageNo, pageSize, sort);
     }
 
 
     @DeleteMapping("/by-ingredient-id")
     @PreAuthorize("#requestDto.userId == authentication.principal.id")
-    public void deleteByIngredientId(DeleteIngredientRequestDto requestDto){
+    public void deleteByIngredientId(DeleteIngredientRequestDto requestDto) {
         ingredientService.deleteByIngredientId(requestDto);
     }
 

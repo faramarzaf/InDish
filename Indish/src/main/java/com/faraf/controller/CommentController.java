@@ -31,13 +31,19 @@ public class CommentController {
 
 
     @GetMapping("/by-postId")
-    public List<CommentResponseDto> findByFoodPostId(@RequestParam Long postId) {
-        return commentService.findByFoodPostId(postId);
+    public List<CommentResponseDto> findByFoodPostId(@RequestParam Long postId,
+                                                     @RequestParam int pageNo,
+                                                     @RequestParam int pageSize,
+                                                     @RequestParam String sort) {
+        return commentService.findByFoodPostId(postId, pageNo, pageSize, sort);
     }
 
     @GetMapping("/by-userId")
-    public List<CommentResponseDto> findByUserId(@RequestParam Long userId) {
-        return commentService.findByUserId(userId);
+    public List<CommentResponseDto> findByUserId(@RequestParam Long userId,
+                                                 @RequestParam int pageNo,
+                                                 @RequestParam int pageSize,
+                                                 @RequestParam String sort) {
+        return commentService.findByUserId(userId, pageNo, pageSize, sort);
     }
 
     @DeleteMapping("/by-id")

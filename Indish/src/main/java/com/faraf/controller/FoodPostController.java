@@ -2,13 +2,10 @@ package com.faraf.controller;
 
 
 import com.faraf.dto.request.DeleteFoodPostRequestDto;
-import com.faraf.dto.request.DeleteIngredientRequestDto;
 import com.faraf.dto.request.FoodPostRequestDto;
 import com.faraf.dto.request.FoodPostUpdateRequestDto;
 import com.faraf.dto.response.FoodPostResponseDto;
-import com.faraf.dto.response.IngredientResponseDto;
 import com.faraf.service.FoodPostService;
-import com.faraf.service.IngredientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -30,42 +27,62 @@ public class FoodPostController {
     }
 
     @GetMapping("by-user-id")
-    public List<FoodPostResponseDto> findAllByUsername(@RequestParam Long userId) {
-        return foodPostService.findAllByUserId(userId);
+    public List<FoodPostResponseDto> findAllByUserId(@RequestParam Long userId,
+                                                     @RequestParam int pageNo,
+                                                     @RequestParam int pageSize,
+                                                     @RequestParam String sort) {
+        return foodPostService.findAllByUserId(userId, pageNo, pageSize, sort);
     }
 
     @GetMapping("by-username")
-    public List<FoodPostResponseDto> findAllByUsername(@RequestParam String username) {
-        return foodPostService.findAllByUsername(username);
+    public List<FoodPostResponseDto> findAllByUsername(@RequestParam String username,
+                                                       @RequestParam int pageNo,
+                                                       @RequestParam int pageSize,
+                                                       @RequestParam String sort) {
+        return foodPostService.findAllByUsername(username, pageNo, pageSize, sort);
     }
 
     @GetMapping("by-country")
-    public List<FoodPostResponseDto> findAllByOriginCountry(@RequestParam String country) {
-        return foodPostService.findAllByOriginCountry(country);
+    public List<FoodPostResponseDto> findAllByOriginCountry(@RequestParam String country,
+                                                            @RequestParam int pageNo,
+                                                            @RequestParam int pageSize,
+                                                            @RequestParam String sort) {
+        return foodPostService.findAllByOriginCountry(country, pageNo, pageSize, sort);
     }
 
 
     @GetMapping("vegans")
-    public List<FoodPostResponseDto> findAllByVeganFoodTrue() {
-        return foodPostService.findAllByVeganFoodTrue();
+    public List<FoodPostResponseDto> findAllByVeganFoodTrue(@RequestParam int pageNo,
+                                                            @RequestParam int pageSize,
+                                                            @RequestParam String sort) {
+        return foodPostService.findAllByVeganFoodTrue(pageNo, pageSize, sort);
     }
 
 
     @GetMapping("non-vegans")
-    public List<FoodPostResponseDto> findAllByVeganFoodFalse() {
-        return foodPostService.findAllByVeganFoodFalse();
+    public List<FoodPostResponseDto> findAllByVeganFoodFalse(@RequestParam int pageNo,
+                                                             @RequestParam int pageSize,
+                                                             @RequestParam String sort) {
+        return foodPostService.findAllByVeganFoodFalse(pageNo, pageSize, sort);
     }
 
 
     @GetMapping("by-time-required")
-    public List<FoodPostResponseDto> findAllByTimeRequiredEquals(@RequestParam int hour) {
-        return foodPostService.findAllByTimeRequiredEquals(hour);
+    public List<FoodPostResponseDto> findAllByTimeRequiredEquals(@RequestParam int hour,
+                                                                 @RequestParam int pageNo,
+                                                                 @RequestParam int pageSize,
+                                                                 @RequestParam String sort) {
+        return foodPostService.findAllByTimeRequiredEquals(hour, pageNo, pageSize, sort);
     }
 
 
     @GetMapping("by-time-required-between")
-    public List<FoodPostResponseDto> findAllByTimeRequiredBetween(@RequestParam int startHour, @RequestParam int endHour) {
-        return foodPostService.findAllByTimeRequiredBetween(startHour, endHour);
+    public List<FoodPostResponseDto> findAllByTimeRequiredBetween(@RequestParam int startHour,
+                                                                  @RequestParam int endHour,
+                                                                  @RequestParam int pageNo,
+                                                                  @RequestParam int pageSize,
+                                                                  @RequestParam String sort) {
+        return foodPostService.findAllByTimeRequiredBetween(startHour, endHour, pageNo, pageSize, sort);
     }
 
 

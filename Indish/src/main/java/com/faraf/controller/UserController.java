@@ -1,24 +1,19 @@
 package com.faraf.controller;
 
 
-import com.faraf.dto.response.JWTAuthResponse;
 import com.faraf.dto.request.LoginDto;
 import com.faraf.dto.request.UserInfoUpdateRequestDto;
 import com.faraf.dto.request.UserPostDto;
+import com.faraf.dto.response.JWTAuthResponse;
 import com.faraf.dto.response.UserGetDto;
-import com.faraf.entity.ConfirmationToken;
-import com.faraf.service.ConfirmationTokenService;
-import com.faraf.service.UserService;
 import com.faraf.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,8 +26,8 @@ public class UserController {
     public List<UserGetDto> getAll(
             @RequestParam(defaultValue = "0") Integer pageNo,
             @RequestParam(defaultValue = "10") Integer pageSize,
-            @RequestParam(defaultValue = "id") String sortBy) {
-        return userService.getAllUsers(pageNo, pageSize, sortBy);
+            @RequestParam(defaultValue = "id") String sort) {
+        return userService.getAllUsers(pageNo, pageSize, sort);
     }
 
     @GetMapping("/by-id")

@@ -2,8 +2,8 @@ package com.faraf.service;
 
 import com.faraf.dto.request.DeleteFoodPostRequestDto;
 import com.faraf.dto.request.FoodPostRequestDto;
-import com.faraf.dto.response.FoodPostResponseDto;
 import com.faraf.dto.request.FoodPostUpdateRequestDto;
+import com.faraf.dto.response.FoodPostResponseDto;
 
 import java.util.List;
 
@@ -13,19 +13,21 @@ public interface FoodPostService {
 
     FoodPostResponseDto addFoodToUser(FoodPostRequestDto requestDto);
 
-    List<FoodPostResponseDto> findAllByUsername(String username);
-
     List<FoodPostResponseDto> findAllByUserId(Long userId);
 
-    List<FoodPostResponseDto> findAllByOriginCountry(String country);
+    List<FoodPostResponseDto> findAllByUsername(String username, int pageNo, int pageSize, String sort);
 
-    List<FoodPostResponseDto> findAllByVeganFoodTrue();
+    List<FoodPostResponseDto> findAllByUserId(Long userId, int pageNo, int pageSize, String sort);
 
-    List<FoodPostResponseDto> findAllByVeganFoodFalse();
+    List<FoodPostResponseDto> findAllByOriginCountry(String country, int pageNo, int pageSize, String sort);
 
-    List<FoodPostResponseDto> findAllByTimeRequiredEquals(int hour);
+    List<FoodPostResponseDto> findAllByVeganFoodTrue(int pageNo, int pageSize, String sort);
 
-    List<FoodPostResponseDto> findAllByTimeRequiredBetween(int startHour, int endHour);
+    List<FoodPostResponseDto> findAllByVeganFoodFalse(int pageNo, int pageSize, String sort);
+
+    List<FoodPostResponseDto> findAllByTimeRequiredEquals(int hour, int pageNo, int pageSize, String sort);
+
+    List<FoodPostResponseDto> findAllByTimeRequiredBetween(int startHour, int endHour, int pageNo, int pageSize, String sort);
 
     void updateFoodPost(FoodPostUpdateRequestDto requestDto);
 

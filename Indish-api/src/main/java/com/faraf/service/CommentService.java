@@ -12,6 +12,10 @@ public interface CommentService {
 
     CommentResponseDto findByCommentId(Long commentId);
 
+    List<CommentResponseDto> findByFoodPostId(Long foodPostId, int pageNo, int pageSize, String sort);
+
+    List<CommentResponseDto> findByUserId(Long userId, int pageNo, int pageSize, String sort);
+
     List<CommentResponseDto> findByFoodPostId(Long foodPostId);
 
     List<CommentResponseDto> findByUserId(Long userId);

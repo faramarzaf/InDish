@@ -8,6 +8,10 @@ import com.faraf.entity.Comment;
 import com.faraf.mapper.CommentMapper;
 import com.faraf.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,6 +47,20 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    public List<CommentResponseDto> findByFoodPostId(Long foodPostId, int pageNo, int pageSize, String sort) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sort));
+        Page<Comment> allCommentsByPostId = commentRepository.findAllByPost_Id(foodPostId, pageable);
+        return commentMapper.toDto(allCommentsByPostId.getContent());
+    }
+
+    @Override
+    public List<CommentResponseDto> findByUserId(Long userId, int pageNo, int pageSize, String sort) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sort));
+        Page<Comment> allCommentsByUserId = commentRepository.findAllByUser_Id(userId, pageable);
+        return commentMapper.toDto(allCommentsByUserId.getContent());
+    }
+
+    @Override
     public List<CommentResponseDto> findByFoodPostId(Long foodPostId) {
         List<Comment> allCommentsByPostId = commentRepository.findAllByPost_Id(foodPostId);
         return commentMapper.toDto(allCommentsByPostId);
@@ -59,4 +77,5 @@ public class CommentServiceImpl implements CommentService {
     public void deleteByCommentId(DeleteCommentRequestDto deleteCommentRequestDto) {
         commentRepository.deleteById(deleteCommentRequestDto.getCommentId());
     }
+
 }
