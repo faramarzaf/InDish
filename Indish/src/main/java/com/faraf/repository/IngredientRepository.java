@@ -11,8 +11,6 @@ import java.util.List;
 @Repository
 public interface IngredientRepository extends PagingAndSortingRepository<Ingredient, Long> {
 
-    List<Ingredient> findAllByFoodPost_Name(String foodName);
-
     List<Ingredient> findAllByFoodPost_Id(Long foodId);
 
     Page<Ingredient> findAllByFoodPost_Name(String foodName, Pageable pageable);

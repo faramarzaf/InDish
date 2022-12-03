@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -24,6 +25,7 @@ public class IngredientRepositoryTest extends BaseTestClass {
 
     private FoodPost sampleVeganFoodPost;
     private Ingredient sampleIngredient;
+    private Pageable pageable;
 
     @BeforeEach
     public void setUp() {
@@ -38,7 +40,7 @@ public class IngredientRepositoryTest extends BaseTestClass {
 
     @Test
     public void it_should_find_ingredients_by_foodPost_name() {
-        List<Ingredient> allByFoodPostName = ingredientRepository.findAllByFoodPost_Name(sampleVeganFoodPost.getName());
+        List<Ingredient> allByFoodPostName = ingredientRepository.findAllByFoodPost_Name(sampleVeganFoodPost.getName(), pageable).getContent();
         assertThat(allByFoodPostName).isNotNull();
         assertThat(allByFoodPostName).isNotEmpty();
     }
@@ -50,15 +52,21 @@ public class IngredientRepositoryTest extends BaseTestClass {
         assertThat(allByFoodPostId).isNotEmpty();
     }
 
+    @Test
+    public void it_should_find_ingredient_page_by_foodPost_id() {
+        List<Ingredient> allByFoodPostId = ingredientRepository.findAllByFoodPost_Id(sampleVeganFoodPost.getId(), pageable).getContent();
+        assertThat(allByFoodPostId).isNotNull();
+        assertThat(allByFoodPostId).isNotEmpty();
+    }
+
     private void saveSampleData() {
         sampleVeganFoodPost = foodPostRepository.save(sampleVeganFoodPost);
         sampleIngredient = ingredientRepository.save(sampleIngredient);
     }
 
     private void initSampleData() {
-
         sampleVeganFoodPost = getSampleVeganFoodPost();
         sampleIngredient = getSampleIngredient(sampleVeganFoodPost);
-
+        pageable = getPageable();
     }
 }

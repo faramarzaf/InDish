@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -25,6 +26,7 @@ public class FoodPostRepositoryTest extends BaseTestClass {
     private FoodPost sampleVeganFoodPost;
     private FoodPost sampleNonVeganFoodPost;
     private User sampleUser;
+    private Pageable pageable;
 
     @BeforeEach
     public void setUp() {
@@ -46,9 +48,17 @@ public class FoodPostRepositoryTest extends BaseTestClass {
     }
 
     @Test
+    public void it_should_find_post_page_by_userId() {
+        sampleVeganFoodPost.setUser(sampleUser);
+        List<FoodPost> allByUserId = foodPostRepository.findAllByUser_Id(sampleUser.getId(), pageable).getContent();
+        assertThat(allByUserId).isNotNull();
+        assertThat(allByUserId).isNotEmpty();
+    }
+
+    @Test
     public void it_should_find_posts_by_username() {
         sampleVeganFoodPost.setUser(sampleUser);
-        List<FoodPost> allByUsername = foodPostRepository.findByUser_UserName(sampleUser.getUserName());
+        List<FoodPost> allByUsername = foodPostRepository.findByUser_UserName(sampleUser.getUserName(), pageable).getContent();
         assertThat(allByUsername).isNotNull();
         assertThat(allByUsername).isNotEmpty();
     }
@@ -56,7 +66,7 @@ public class FoodPostRepositoryTest extends BaseTestClass {
     @Test
     public void it_should_find_posts_by_food_originCountry() {
         sampleVeganFoodPost.setUser(sampleUser);
-        List<FoodPost> allByFoodOriginCountry = foodPostRepository.findAllByOriginCountry(sampleVeganFoodPost.getOriginCountry());
+        List<FoodPost> allByFoodOriginCountry = foodPostRepository.findAllByOriginCountry(sampleVeganFoodPost.getOriginCountry(), pageable).getContent();
         assertThat(allByFoodOriginCountry).isNotNull();
         assertThat(allByFoodOriginCountry).isNotEmpty();
     }
@@ -65,7 +75,7 @@ public class FoodPostRepositoryTest extends BaseTestClass {
     public void it_should_find_all_vegan_foods() {
         sampleVeganFoodPost.setUser(sampleUser);
         sampleNonVeganFoodPost.setUser(sampleUser);
-        List<FoodPost> allVeganFoods = foodPostRepository.findAllByVeganFoodTrue();
+        List<FoodPost> allVeganFoods = foodPostRepository.findAllByVeganFoodTrue(pageable).getContent();
         assertThat(allVeganFoods).isNotNull();
         assertThat(allVeganFoods).isNotEmpty();
         assertThat(allVeganFoods).doesNotContain(sampleNonVeganFoodPost);
@@ -75,7 +85,7 @@ public class FoodPostRepositoryTest extends BaseTestClass {
     public void it_should_find_all_non_vegan_foods() {
         sampleVeganFoodPost.setUser(sampleUser);
         sampleNonVeganFoodPost.setUser(sampleUser);
-        List<FoodPost> allNonVeganFoods = foodPostRepository.findAllByVeganFoodFalse();
+        List<FoodPost> allNonVeganFoods = foodPostRepository.findAllByVeganFoodFalse(pageable).getContent();
         assertThat(allNonVeganFoods).isNotNull();
         assertThat(allNonVeganFoods).isNotEmpty();
         assertThat(allNonVeganFoods).doesNotContain(sampleVeganFoodPost);
@@ -84,7 +94,7 @@ public class FoodPostRepositoryTest extends BaseTestClass {
     @Test
     public void it_should_find_foods_with_given_time_required_to_ready() {
         sampleVeganFoodPost.setUser(sampleUser);
-        List<FoodPost> allByTimeRequiredEquals = foodPostRepository.findAllByTimeRequiredEquals(sampleVeganFoodPost.getTimeRequired());
+        List<FoodPost> allByTimeRequiredEquals = foodPostRepository.findAllByTimeRequiredEquals(sampleVeganFoodPost.getTimeRequired(), pageable).getContent();
         assertThat(allByTimeRequiredEquals).isNotNull();
         assertThat(allByTimeRequiredEquals).isNotEmpty();
     }
@@ -92,7 +102,7 @@ public class FoodPostRepositoryTest extends BaseTestClass {
     @Test
     public void it_should_find_foods_with_given_startTime_and_endTime_required_to_ready() {
         sampleVeganFoodPost.setUser(sampleUser);
-        List<FoodPost> allByTimeRequiredBetween = foodPostRepository.findAllByTimeRequiredBetween(0, sampleVeganFoodPost.getTimeRequired());
+        List<FoodPost> allByTimeRequiredBetween = foodPostRepository.findAllByTimeRequiredBetween(0, sampleVeganFoodPost.getTimeRequired(), pageable).getContent();
         assertThat(allByTimeRequiredBetween).isNotNull();
         assertThat(allByTimeRequiredBetween).isNotEmpty();
     }
@@ -107,5 +117,6 @@ public class FoodPostRepositoryTest extends BaseTestClass {
         sampleVeganFoodPost = getSampleVeganFoodPost();
         sampleNonVeganFoodPost = getSampleNonVeganFoodPost();
         sampleUser = getCorrectSampleUser();
+        pageable = getPageable();
     }
 }

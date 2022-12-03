@@ -1,6 +1,9 @@
 package com.faraf;
 
 import com.faraf.entity.*;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.time.LocalDateTime;
 
@@ -70,5 +73,9 @@ public class BaseTestClass {
         confirmationToken.setConfirmationToken("token");
         confirmationToken.setCreatedDate(LocalDateTime.now());
         return confirmationToken;
+    }
+
+    public Pageable getPageable() {
+        return PageRequest.of(0, 1, Sort.by("id"));
     }
 }
