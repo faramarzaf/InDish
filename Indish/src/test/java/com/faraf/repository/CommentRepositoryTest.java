@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -30,6 +31,7 @@ public class CommentRepositoryTest extends BaseTestClass {
     private FoodPost sampleNonVeganFoodPost;
     private Comment sampleComment;
     private User sampleUser;
+    private Pageable pageable;
 
     @BeforeEach
     public void setUp() {
@@ -58,11 +60,26 @@ public class CommentRepositoryTest extends BaseTestClass {
         assertThat(allByUser_id).isNotEmpty();
     }
 
+    @Test
+    public void it_should_find_comment_page_by_postId() {
+        List<Comment> allByUser_id = commentRepository.findAllByUser_Id(sampleUser.getId(), pageable).getContent();
+        assertThat(allByUser_id).isNotNull();
+        assertThat(allByUser_id).isNotEmpty();
+    }
+
+    @Test
+    public void it_should_find_comments_page_by_userId() {
+        List<Comment> allByUser_id = commentRepository.findAllByUser_Id(sampleUser.getId(), pageable).getContent();
+        assertThat(allByUser_id).isNotNull();
+        assertThat(allByUser_id).isNotEmpty();
+    }
+
     private void initSampleData() {
         sampleVeganFoodPost = getSampleVeganFoodPost();
         sampleNonVeganFoodPost = getSampleNonVeganFoodPost();
         sampleUser = getCorrectSampleUser();
         sampleComment = getSampleComment(sampleUser, sampleVeganFoodPost);
+        pageable = getPageable();
     }
 
     private void saveSampleData() {
