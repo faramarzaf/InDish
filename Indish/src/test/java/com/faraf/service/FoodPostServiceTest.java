@@ -5,7 +5,6 @@ import com.faraf.BaseTestClass;
 import com.faraf.dto.request.DeleteFoodPostRequestDto;
 import com.faraf.dto.request.FoodPostRequestDto;
 import com.faraf.dto.request.FoodPostUpdateRequestDto;
-import com.faraf.dto.request.UserInfoUpdateRequestDto;
 import com.faraf.dto.response.FoodPostResponseDto;
 import com.faraf.entity.FoodPost;
 import com.faraf.entity.User;
@@ -84,11 +83,11 @@ public class FoodPostServiceTest extends BaseTestClass {
 
     @Test
     public void it_should_throw_exception_when_notFound_food_post_by_id() {
-        long userId = 1L;
-        when(foodPostRepository.findById(userId)).thenReturn(Optional.empty());
-        assertThatThrownBy(() -> foodPostService.findById(userId))
+        long foodId = 1L;
+        when(foodPostRepository.findById(foodId)).thenReturn(Optional.empty());
+        assertThatThrownBy(() -> foodPostService.findById(foodId))
                 .isInstanceOf(NotFoundException.class)
-                .hasMessage("The food not found with id:" + userId);
+                .hasMessage("The food not found with id:" + foodId);
     }
 
 
@@ -214,14 +213,14 @@ public class FoodPostServiceTest extends BaseTestClass {
         when(foodPostRepository.findById(userId)).thenReturn(Optional.of(foodPost));
 
         FoodPostResponseDto foodPostResponseDto = foodPostService.findById(userId);
-        FoodPost foodPost1 =  foodMapper.toEntity(foodPostResponseDto);
+        FoodPost foodPostEntity = foodMapper.toEntity(foodPostResponseDto);
         foodPostService.updateFoodPost(requestDto);
         assertEquals("new name", foodPost.getName());
         assertEquals("new desc", foodPost.getDescription());
         assertEquals("new country", foodPost.getOriginCountry());
         assertEquals(3, foodPost.getTimeRequired());
         assertTrue(foodPost.isVeganFood());
-        verify(foodPostRepository, times(1)).save(foodPost1);
+        verify(foodPostRepository, times(1)).save(foodPostEntity);
     }
 
 

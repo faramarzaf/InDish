@@ -44,11 +44,11 @@ public class IngredientServiceImpl implements IngredientService {
     @Override
     @Transactional
     public IngredientResponseDto addIngredientToFood(IngredientsRequestDto ingredientsRequestDto, Long foodId) {
-        FoodPostResponseDto foodPostServiceById = foodPostService.findById(foodId);
-        if (ObjectUtils.isEmpty(foodPostServiceById))
+        FoodPostResponseDto foodPostResponseById = foodPostService.findById(foodId);
+        if (ObjectUtils.isEmpty(foodPostResponseById))
             throw new NotFoundException("The food not found with id:" + foodId);
 
-        FoodPost foodPost = foodMapper.toEntity(foodPostServiceById);
+        FoodPost foodPost = foodMapper.toEntity(foodPostResponseById);
         Ingredient ingredientEntity = new Ingredient();
         ingredientEntity.setFoodPost(foodPost);
         ingredientEntity.setContent(ingredientsRequestDto.getContent());
