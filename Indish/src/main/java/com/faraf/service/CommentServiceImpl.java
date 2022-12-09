@@ -5,6 +5,7 @@ import com.faraf.dto.request.CommentRequestDto;
 import com.faraf.dto.request.DeleteCommentRequestDto;
 import com.faraf.dto.response.CommentResponseDto;
 import com.faraf.entity.Comment;
+import com.faraf.exception.NotFoundException;
 import com.faraf.mapper.CommentMapper;
 import com.faraf.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -42,34 +44,45 @@ public class CommentServiceImpl implements CommentService {
         if (optCommentById.isPresent()) {
             Comment comment = optCommentById.get();
             return commentMapper.toDto(comment);
-        }
-        return null;
+        } else throw new NotFoundException("Not found any comment with id:" + commentId);
     }
 
     @Override
     public List<CommentResponseDto> findByFoodPostId(Long foodPostId, int pageNo, int pageSize, String sort) {
         Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sort));
         Page<Comment> allCommentsByPostId = commentRepository.findAllByPost_Id(foodPostId, pageable);
-        return commentMapper.toDto(allCommentsByPostId.getContent());
+        if (ObjectUtils.isEmpty(allCommentsByPostId.getContent()))
+            throw new NotFoundException("Not found any comments with food post id:" + foodPostId);
+        else
+            return commentMapper.toDto(allCommentsByPostId.getContent());
     }
 
     @Override
     public List<CommentResponseDto> findByUserId(Long userId, int pageNo, int pageSize, String sort) {
         Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sort));
         Page<Comment> allCommentsByUserId = commentRepository.findAllByUser_Id(userId, pageable);
-        return commentMapper.toDto(allCommentsByUserId.getContent());
+        if (ObjectUtils.isEmpty(allCommentsByUserId.getContent()))
+            throw new NotFoundException("Not found any comments with user id:" + userId);
+        else
+            return commentMapper.toDto(allCommentsByUserId.getContent());
     }
 
     @Override
     public List<CommentResponseDto> findByFoodPostId(Long foodPostId) {
         List<Comment> allCommentsByPostId = commentRepository.findAllByPost_Id(foodPostId);
-        return commentMapper.toDto(allCommentsByPostId);
+        if (ObjectUtils.isEmpty(allCommentsByPostId))
+            throw new NotFoundException("Not found any comments with food post id:" + foodPostId);
+        else
+            return commentMapper.toDto(allCommentsByPostId);
     }
 
     @Override
     public List<CommentResponseDto> findByUserId(Long userId) {
         List<Comment> allCommentsByUserId = commentRepository.findAllByUser_Id(userId);
-        return commentMapper.toDto(allCommentsByUserId);
+        if (ObjectUtils.isEmpty(allCommentsByUserId))
+            throw new NotFoundException("Not found any comments with user id:" + userId);
+        else
+            return commentMapper.toDto(allCommentsByUserId);
     }
 
     @Override
