@@ -1,6 +1,7 @@
 package com.faraf.service;
 
 import com.faraf.entity.ConfirmationToken;
+import com.faraf.exception.AuthException;
 import com.faraf.repository.ConfirmationTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,8 +27,12 @@ public class ConfirmationTokenService {
     }
 
 
-    public Optional<ConfirmationToken> findConfirmationTokenByToken(String token) {
-        return confirmationTokenRepository.findConfirmationTokenByConfirmationToken(token);
+    public ConfirmationToken findConfirmationTokenByToken(String token) {
+        Optional<ConfirmationToken> optionalConfirmationToken = confirmationTokenRepository.findConfirmationTokenByConfirmationToken(token);
+        if (optionalConfirmationToken.isPresent())
+            return optionalConfirmationToken.get();
+
+        else throw new AuthException("Wrong credentials for email verification!");
     }
 
     public Optional<ConfirmationToken> findConfirmationTokenByUserEmail(String email) {
