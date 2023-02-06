@@ -6,7 +6,7 @@ import com.faraf.dto.request.UserInfoUpdateRequestDto;
 import com.faraf.dto.request.UserPostDto;
 import com.faraf.dto.response.JWTAuthResponse;
 import com.faraf.dto.response.UserGetDto;
-import com.faraf.service.UserServiceImpl;
+import com.faraf.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,7 +20,7 @@ import java.util.List;
 @RequestMapping("api/v1/user")
 public class UserController {
 
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
     @GetMapping("/all")
     public List<UserGetDto> getAll(

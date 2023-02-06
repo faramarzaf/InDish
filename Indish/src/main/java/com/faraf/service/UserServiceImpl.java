@@ -86,10 +86,10 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     public void confirmUser(ConfirmationToken confirmationToken) {
-        final User user = confirmationToken.getUser();
+        User user = confirmationToken.getUser();
         user.setEnabled(true);
         userRepository.save(user);
-        confirmationTokenService.deleteConfirmationToken(confirmationToken.getId());
+        confirmationTokenService.deleteConfirmationToken(confirmationToken.getId());//todo test if no delete what happens
     }
 
     @Override
@@ -105,8 +105,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserGetDto> getAllUsers(Integer pageNo, Integer pageSize, String sortBy) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+    public List<UserGetDto> getAllUsers(Integer pageNo, Integer pageSize, String sort) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sort));
         Page<User> users = userRepository.findAll(pageable);
         PageImpl<UserGetDto> responseDtoPage = new PageImpl<>(users.getContent()
                 .stream()
@@ -179,8 +179,7 @@ public class UserServiceImpl implements UserService {
         else if (userRepository.existsUserByEmail(userPostDto.getEmail()))
             throw new DuplicatedRecordException("Email has already taken, try with another one.");
 
-        else
-            return !userRepository.existsUserByUserName(userPostDto.getUserName()) && !userRepository.existsUserByEmail(userPostDto.getEmail());
+        return true;
     }
 
     private void validateRoles(Set<Role> roles) {
